@@ -1,5 +1,6 @@
 # Documentation & Proprietary specifications
 design.md
+design1.md
 prd-btc-etf-flow-dashboard.md
 *.md
 !README.md
@@ -10,8 +11,26 @@ prd-btc-etf-flow-dashboard.md
 anti-slop/
 skills-lock.json
 
+# Dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+
+# Next.js & Build
+/.next/
+/out/
+/build
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
 # Logs & System artifacts
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 .system_generated/
 .gemini/
 
@@ -19,9 +38,7 @@ skills-lock.json
 .DS_Store
 Thumbs.db
 desktop.ini
-.env
-.env.local
-.env.*.local
+.env*
 
 # Editor directories
 .vscode/

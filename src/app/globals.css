@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  --color-klarna-pink: #FFB3C7;
+  --color-klarna-pink-hover: #FFA0B9;
+  --color-klarna-pink-pressed: #F58BA6;
+  --color-klarna-ink: #0E0E0E;
+  --color-klarna-muted: #4A4A4A;
+  --color-klarna-subdued: #767676;
+  --color-klarna-canvas: #FFFFFF;
+  --color-klarna-surface-1: #F7F6F4;
+  --color-klarna-surface-2: #EFEDEA;
+  --color-klarna-border: #E3E0DC;
+  --color-klarna-border-subtle: #EFEDEA;
+  --color-klarna-success: #0B8A4B;
+  --color-klarna-warning: #C26A00;
+  --color-klarna-error: #D6332E;
+
+  --font-title: var(--font-title), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: var(--font-title), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: var(--font-mono), monospace;
+
+  --radius-sm: 16px;
+  --radius-md: 20px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 9999px;
+
+  --shadow-card: 0px 2px 6px rgba(14, 14, 14, 0.03), 0px 1px 2px rgba(14, 14, 14, 0.02);
+  --shadow-elevated: 0px 16px 36px rgba(14, 14, 14, 0.07), 0px 2px 6px rgba(14, 14, 14, 0.03);
+  --shadow-pink-glow: 0px 8px 24px rgba(255, 179, 199, 0.35);
+}
+
+:root {
+  --color-pink: #FFB3C7;
+  --color-pink-hover: #FFA0B9;
+  --color-pink-pressed: #F58BA6;
+  --color-ink: #0E0E0E;
+  --color-muted: #4A4A4A;
+  --color-subdued: #767676;
+  --color-canvas: #FFFFFF;
+  --color-surface-1: #F7F6F4;
+  --color-surface-2: #EFEDEA;
+  --color-border: #E3E0DC;
+  --color-success: #0B8A4B;
+  --color-warning: #C26A00;
+  --color-error: #D6332E;
+
+  --radius-sm: 16px;
+  --radius-md: 20px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 9999px;
+
+  --motion-easing: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-duration: 240ms;
+}
+
+body {
+  background-color: var(--color-surface-1);
+  color: var(--color-ink);
+  font-family: var(--font-title);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Klarna Display Headline: 700/800 bold, tight tracking (-0.03em to -0.04em), leading 0.96 */
+.klarna-display {
+  font-family: var(--font-title);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
+}
+
+.klarna-heading {
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+/* Tabular Numerals for Finance */
+.font-finance {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Klarna 2px Solid Ring Focus Indicator */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #0E0E0E;
+}
+
+/* Pill Press Motion */
+.btn-pill-press {
+  transition: all 120ms var(--motion-easing);
+}
+.btn-pill-press:active {
+  transform: scale(0.97);
+}
+
+/* Toast Notification Styles */
+.klarna-toast {
+  pointer-events: auto;
+  background: #0E0E0E;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 179, 199, 0.4);
+  padding: 12px 20px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(14, 14, 14, 0.25);
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 240ms var(--motion-easing);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F7F6F4;
+}
+::-webkit-scrollbar-thumb {
+  background: #E3E0DC;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FFB3C7;
+}
