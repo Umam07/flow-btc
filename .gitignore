@@ -1,0 +1,28 @@
+# Documentation & Proprietary specifications
+design.md
+prd-btc-etf-flow-dashboard.md
+*.md
+!README.md
+
+# AI Agent & IDE customizations
+.agents/
+.codegraph/
+anti-slop/
+skills-lock.json
+
+# Logs & System artifacts
+*.log
+.system_generated/
+.gemini/
+
+# Operating System & Environment
+.DS_Store
+Thumbs.db
+desktop.ini
+.env
+.env.local
+.env.*.local
+
+# Editor directories
+.vscode/
+.idea/

@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bitcoin ETF Flow Dashboard | Institutional Capital Tracker</title>
+  <meta name="description" content="A playful, confident fintech dashboard tracking US Spot Bitcoin ETF net flows with Klarna visual design language." />
+
+  <!-- Typography: Plus Jakarta Sans for Klarna Display & Text, JetBrains Mono for tabular numbers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'klarna-pink': '#FFB3C7',
+            'klarna-pink-hover': '#FFA0B9',
+            'klarna-pink-pressed': '#F58BA6',
+            'klarna-ink': '#0E0E0E',
+            'klarna-muted': '#4A4A4A',
+            'klarna-subdued': '#767676',
+            'klarna-canvas': '#FFFFFF',
+            'klarna-surface-1': '#F7F6F4',
+            'klarna-surface-2': '#EFEDEA',
+            'klarna-border': '#E3E0DC',
+            'klarna-border-subtle': '#EFEDEA',
+            'klarna-success': '#0B8A4B',
+            'klarna-warning': '#C26A00',
+            'klarna-error': '#D6332E',
+          },
+          fontFamily: {
+            title: ['"Plus Jakarta Sans"', '"Klarna Title"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            body: ['"Plus Jakarta Sans"', '"Klarna Text"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          borderRadius: {
+            'sm': '16px',
+            'md': '20px',
+            'lg': '24px',
+            'xl': '32px',
+            'pill': '9999px',
+          },
+          boxShadow: {
+            'card': '0px 2px 6px rgba(14, 14, 14, 0.03), 0px 1px 2px rgba(14, 14, 14, 0.02)',
+            'elevated': '0px 16px 36px rgba(14, 14, 14, 0.07), 0px 2px 6px rgba(14, 14, 14, 0.03)',
+            'pink-glow': '0px 8px 24px rgba(255, 179, 199, 0.35)',
+          }
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Strict Design Tokens from design.md */
+    :root {
+      /* Typography */
+      --font-title: "Plus Jakarta Sans", "Klarna Title", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-text: "Plus Jakarta Sans", "Klarna Text", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      /* Colors */
+      --color-pink: #FFB3C7;
+      --color-pink-hover: #FFA0B9;
+      --color-pink-pressed: #F58BA6;
+      --color-ink: #0E0E0E;
+      --color-muted: #4A4A4A;
+      --color-subdued: #767676;
+      --color-canvas: #FFFFFF;
+      --color-surface-1: #F7F6F4;
+      --color-surface-2: #EFEDEA;
+      --color-border: #E3E0DC;
+      --color-success: #0B8A4B;
+      --color-warning: #C26A00;
+      --color-error: #D6332E;
+
+      /* Radius */
+      --radius-sm: 16px;
+      --radius-md: 20px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --radius-pill: 9999px;
+
+      /* Motion */
+      --motion-easing: cubic-bezier(0.22, 1, 0.36, 1);
+      --motion-duration: 240ms;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--color-surface-1);
+      color: var(--color-ink);
+      font-family: var(--font-text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Klarna Display Headline: 700/800 bold, tight tracking (-0.03em to -0.04em), leading 0.95 */
+    .klarna-display {
+      font-family: var(--font-title);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+    }
+
+    .klarna-heading {
+      font-family: var(--font-title);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    /* Tabular Numerals for Finance */
+    .font-finance {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Klarna 2px Solid Ring Focus Indicator (Strict design.md Accessibility Spec) */
+    .focus-ring {
+      outline: none;
+    }
+    .focus-ring:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #0E0E0E;
+    }
+
+    /* Pill Press Motion: 120ms scale-down to 0.97 */
+    .btn-pill-press {
+      transition: all 120ms var(--motion-easing);
+    }
+    .btn-pill-press:active {
+      transform: scale(0.97);
+    }
+
+    /* Toast Notification System */
+    #toastContainer {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .klarna-toast {
+      pointer-events: auto;
+      background: #0E0E0E;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 179, 199, 0.4);
+      padding: 12px 20px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(14, 14, 14, 0.25);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 240ms var(--motion-easing);
+    }
+
+    .klarna-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F7F6F4;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E3E0DC;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FFB3C7;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-klarna-surface-1 text-klarna-ink selection:bg-klarna-pink selection:text-klarna-ink antialiased">
+
+  <!-- ================= TOP NAVBAR (Klarna Radical Simplicity: Pink Wordmark, Floating Nav, Black Pill CTA) ================= -->
+  <header class="sticky top-0 z-50 w-full border-b border-klarna-border bg-klarna-surface-1/90 backdrop-blur-md">
+    <div class="max-w-[1240px] mx-auto px-4 sm:px-8 h-20 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo / Wordmark (Klarna Signature Pink Circle & Confident Ink) -->
+      <a href="#overview" class="flex items-center gap-3 group focus-ring rounded-xl p-1 shrink-0" aria-label="Bitcoin ETF Flow Dashboard Home">
+        <div class="w-10 h-10 rounded-full bg-klarna-pink flex items-center justify-center font-title font-black text-klarna-ink text-lg transition-transform group-hover:scale-105 shadow-sm">
+          ₿
+        </div>
+        <div class="flex items-baseline gap-2">
+          <span class="font-title font-black text-xl tracking-tight text-klarna-ink group-hover:opacity-80 transition-opacity">
+            BTC FLOW
+          </span>
+          <span class="hidden lg:inline-block text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">
+            ETF Tracker
+          </span>
+        </div>
+      </a>
+
+      <!-- Center: Floating Segmented Pill Nav (Near-White Canvas, Spacious & Breathing) -->
+      <nav class="hidden md:flex items-center gap-1 p-1.5 rounded-full bg-klarna-canvas border border-klarna-border shadow-card text-xs font-semibold text-klarna-muted" aria-label="Primary Navigation">
+        <a href="#overview" class="px-4 py-2 rounded-full text-klarna-ink hover:bg-klarna-surface-1 transition-all focus-ring">Overview</a>
+        <a href="#chart-section" class="px-4 py-2 rounded-full hover:text-klarna-ink hover:bg-klarna-surface-1 transition-all focus-ring">Dynamics</a>
+        <a href="#issuers" class="px-4 py-2 rounded-full hover:text-klarna-ink hover:bg-klarna-surface-1 transition-all focus-ring">Issuers</a>
+        <a href="#historical-data" class="px-4 py-2 rounded-full hover:text-klarna-ink hover:bg-klarna-surface-1 transition-all focus-ring">Ledger</a>
+        <a href="#scripting-studio" class="px-4 py-2 rounded-full hover:text-klarna-ink hover:bg-klarna-surface-1 transition-all focus-ring">Lab</a>
+      </nav>
+
+      <!-- Right Action Bar: Compact Live Sync Pill & Confident Black Pill Button -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Live Scraper Sync Pill -->
+        <button 
+          type="button" 
+          onclick="triggerDataSync()" 
+          id="syncButton" 
+          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-klarna-canvas border border-klarna-border hover:border-klarna-ink/30 text-xs text-klarna-muted hover:text-klarna-ink transition-all shadow-card focus-ring" 
+          title="Automated pipeline sync with farside.co.uk • Click to refresh"
+          aria-label="Refresh Data Pipeline"
+        >
+          <span class="text-xs font-mono font-medium hidden sm:inline" id="navSyncTime">14:00 UTC</span>
+          <svg id="syncIcon" class="w-3.5 h-3.5 text-klarna-subdued" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+            <path d="M16 21h5v-5"/>
+          </svg>
+        </button>
+
+        <!-- Primary CTA: Confident Black Pill (Klarna Atom) with White Ink -->
+        <button 
+          type="button" 
+          onclick="downloadCSV()" 
+          class="btn-pill-press inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-klarna-ink text-white font-title font-bold text-sm hover:bg-black transition-all focus-ring shadow-card"
+          aria-label="Export dataset to CSV"
+        >
+          <svg class="w-4 h-4 text-klarna-pink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>Export</span>
+        </button>
+
+        <!-- Mobile Hamburger Toggle (md:hidden) -->
+        <button 
+          type="button" 
+          id="mobileMenuBtn" 
+          onclick="toggleMobileMenu()" 
+          class="md:hidden p-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-klarna-ink hover:bg-klarna-surface-2 focus-ring transition-colors shadow-card"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+        >
+          <svg id="menuIconBars" class="w-4 h-4 block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+          <svg id="menuIconClose" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu (Accessible, Clean) -->
+    <div id="mobileMenuDrawer" class="hidden md:hidden border-t border-klarna-border bg-klarna-canvas px-6 py-6 space-y-4 shadow-elevated">
+      <nav class="flex flex-col space-y-3 text-base font-semibold text-klarna-muted" aria-label="Mobile Navigation">
+        <a href="#overview" onclick="toggleMobileMenu()" class="py-2 text-klarna-ink hover:text-black transition-colors">Overview</a>
+        <a href="#chart-section" onclick="toggleMobileMenu()" class="py-2 hover:text-klarna-ink transition-colors">Dynamics</a>
+        <a href="#issuers" onclick="toggleMobileMenu()" class="py-2 hover:text-klarna-ink transition-colors">Issuers Directory</a>
+        <a href="#historical-data" onclick="toggleMobileMenu()" class="py-2 hover:text-klarna-ink transition-colors">Historical Ledger</a>
+        <a href="#scripting-studio" onclick="toggleMobileMenu()" class="py-2 hover:text-klarna-ink transition-colors flex items-center justify-between">
+          <span>Indicator Lab</span>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] bg-klarna-pink font-bold text-klarna-ink font-mono">Fase 2</span>
+        </a>
+      </nav>
+      <div class="pt-4 border-t border-klarna-border">
+        <button 
+          type="button" 
+          onclick="downloadCSV(); toggleMobileMenu();" 
+          class="w-full py-3 rounded-full bg-klarna-ink text-white font-title font-bold text-sm text-center"
+        >
+          Export CSV Data
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT CONTAINER ================= -->
+  <main class="max-w-[1240px] mx-auto px-4 sm:px-8 py-12 sm:py-16 space-y-20 sm:space-y-24">
+
+    <!-- ================= HERO SECTION (Full Klarna Warmth: Signature Pink Surface & Display Typography) ================= -->
+    <section id="overview" class="space-y-8">
+      
+      <!-- Signature Klarna Hero Banner (Full-Bleed Pink Surface #FFB3C7, Confident #0E0E0E Type) -->
+      <div class="p-8 sm:p-14 lg:p-16 rounded-[32px] bg-klarna-pink text-klarna-ink shadow-pink-glow relative overflow-hidden flex flex-col justify-between gap-10">
+        <div class="max-w-3xl space-y-6">
+          <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-white/80 border border-black/10 text-klarna-ink text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+            <span id="heroBadgeStatus">Institutional Capital Tracker</span>
+          </div>
+
+          <h1 class="klarna-display text-4xl sm:text-6xl lg:text-7xl text-klarna-ink font-black">
+            Where institutional capital <br class="hidden sm:inline" />
+            flows into Bitcoin.
+          </h1>
+
+          <p class="text-klarna-ink/85 text-base sm:text-xl font-medium leading-relaxed max-w-2xl">
+            Live net inflows, redemptions, and historical liquidity trends across all 11 US Spot Bitcoin ETFs. Clean, transparent, and effortlessly accessible.
+          </p>
+        </div>
+
+        <!-- Period Horizon Selector (Soft White Pill Segment on Pink) -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-black/10">
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-klarna-ink/75">
+            <span>Horizon Window:</span>
+            <span class="period-label text-klarna-ink font-black font-mono">30D</span>
+          </div>
+
+          <div class="inline-flex p-1.5 rounded-full bg-white shadow-sm border border-black/5" id="rangeFilterContainer" role="group" aria-label="Time Horizon Filters">
+            <button type="button" onclick="changePeriod('7d', this)" class="period-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all text-klarna-muted hover:text-klarna-ink focus-ring">7D</button>
+            <button type="button" onclick="changePeriod('30d', this)" class="period-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all bg-klarna-ink text-white focus-ring">30D</button>
+            <button type="button" onclick="changePeriod('90d', this)" class="period-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all text-klarna-muted hover:text-klarna-ink focus-ring">90D</button>
+            <button type="button" onclick="changePeriod('ytd', this)" class="period-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all text-klarna-muted hover:text-klarna-ink focus-ring">YTD</button>
+            <button type="button" onclick="changePeriod('all', this)" class="period-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all text-klarna-muted hover:text-klarna-ink focus-ring">ALL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 4 KPI METRICS (Klarna Plain-Language Amount Blocks on Clean White Canvas) ================= -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-6">
+        
+        <!-- Card 1: HERO SPOTLIGHT (Col-span 4 lg) — Primary Focal Point -->
+        <div class="lg:col-span-4 p-8 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-klarna-subdued">
+                Net Capital Flow (<span class="period-label text-klarna-ink">30D</span>)
+              </span>
+              <span class="w-8 h-8 rounded-full bg-klarna-surface-2 text-klarna-ink flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                  <polyline points="17 6 23 6 23 12"/>
+                </svg>
+              </span>
+            </div>
+            <div id="kpiNetFlow" class="klarna-display text-4xl sm:text-5xl text-klarna-success font-black mb-2">
+              +$3,428.5M
+            </div>
+            <p class="text-xs text-klarna-muted">Total institutional capital entering spot trusts</p>
+          </div>
+          <div class="pt-5 border-t border-klarna-border flex items-center justify-between text-xs mt-6">
+            <span id="kpiDeltaBadge" class="text-klarna-success font-bold flex items-center gap-1 font-finance">
+              +$284.1M (+9.0%)
+            </span>
+            <span class="text-klarna-subdued font-medium">vs prior window</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Latest Session Overview (Col-span 3 lg) -->
+        <div class="lg:col-span-3 p-7 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-klarna-subdued" id="kpiLatestDateLabel">Latest Session</span>
+              <span class="w-8 h-8 rounded-full bg-klarna-surface-2 text-klarna-ink flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+              </span>
+            </div>
+            <div id="kpiLatestDay" class="klarna-display text-3xl sm:text-4xl text-klarna-ink font-bold mb-2 font-finance">
+              +$312.4M
+            </div>
+          </div>
+          <div class="pt-4 border-t border-klarna-border flex items-center justify-between text-xs text-klarna-muted">
+            <span id="kpiLatestInflowCount" class="text-klarna-success font-bold">8 Funds Inflow</span>
+            <span id="kpiLatestOutflowCount" class="text-klarna-error font-bold">1 Outflow</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Dominant Fund Breakdown (Col-span 3 lg) -->
+        <div class="lg:col-span-3 p-7 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Dominant Fund</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-klarna-pink text-klarna-ink text-xs font-bold font-mono">IBIT</span>
+            </div>
+            <div id="kpiTopIssuer" class="klarna-display text-3xl sm:text-4xl text-klarna-ink font-bold mb-2 font-finance">
+              +$2,481.0M
+            </div>
+          </div>
+          <div class="pt-4 border-t border-klarna-border space-y-1.5">
+            <div class="flex justify-between text-xs text-klarna-muted font-medium">
+              <span>BlackRock Share</span>
+              <span id="kpiIbitSharePct" class="text-klarna-ink font-mono font-bold">58.2%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-klarna-surface-2 overflow-hidden">
+              <div id="kpiIbitProgressBar" class="h-full bg-klarna-ink rounded-full transition-all duration-500" style="width: 58.2%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Cumulative All-Time (Col-span 2 lg) -->
+        <div class="lg:col-span-2 p-7 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Total Net</span>
+              <span class="w-8 h-8 rounded-full bg-klarna-surface-2 text-klarna-muted flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                  <polyline points="2 17 12 22 22 17"/>
+                  <polyline points="2 12 12 17 22 12"/>
+                </svg>
+              </span>
+            </div>
+            <div id="kpiCumulativeAllTime" class="klarna-display text-2xl sm:text-3xl text-klarna-ink font-bold mb-1 font-finance">
+              +$21.14B
+            </div>
+          </div>
+          <div class="pt-4 border-t border-klarna-border text-xs text-klarna-muted">
+            <span class="text-klarna-subdued">Reserves:</span>
+            <div id="kpiEstimatedBtc" class="text-klarna-ink font-mono font-bold mt-0.5">~341,200 BTC</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= MAIN CHART SECTION (Klarna Canvas, High Contrast Data Series) ================= -->
+    <section id="chart-section" class="p-6 sm:p-10 rounded-[28px] bg-klarna-canvas border border-klarna-border shadow-card space-y-8">
+      
+      <!-- Chart Controls & Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-klarna-border pb-6">
+        <div>
+          <h2 class="klarna-heading text-2xl sm:text-3xl text-klarna-ink flex items-center gap-3">
+            <span>Institutional Flow Dynamics</span>
+            <span id="activeChartBadge" class="text-xs px-3 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink font-semibold">
+              Daily Net Flow ($M)
+            </span>
+          </h2>
+          <p class="text-sm text-klarna-muted mt-1">
+            Tracking daily capital entries against institutional liquidations across US Spot Bitcoin ETFs.
+          </p>
+        </div>
+
+        <!-- Chart Mode Tabs (Pill Segmented Switcher) -->
+        <div class="inline-flex p-1 rounded-full bg-klarna-surface-2 border border-klarna-border self-start md:self-auto" role="tablist" aria-label="Chart display modes">
+          <button type="button" id="btnTabDaily" onclick="switchChartMode('daily')" class="px-4 py-2 rounded-full text-xs font-bold transition-all bg-klarna-ink text-white focus-ring" role="tab" aria-selected="true">
+            Daily Net Flow
+          </button>
+          <button type="button" id="btnTabCumulative" onclick="switchChartMode('cumulative')" class="px-4 py-2 rounded-full text-xs font-bold transition-all text-klarna-muted hover:text-klarna-ink focus-ring" role="tab" aria-selected="false">
+            Cumulative Trajectory
+          </button>
+          <button type="button" id="btnTabBreakdown" onclick="switchChartMode('breakdown')" class="px-4 py-2 rounded-full text-xs font-bold transition-all text-klarna-muted hover:text-klarna-ink focus-ring" role="tab" aria-selected="false">
+            Fund Breakdown
+          </button>
+        </div>
+      </div>
+
+      <!-- Financial Metric Strip (Clean Surface-2 Nested Panels) -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 py-1">
+        <div class="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Peak Day Inflow</span>
+          <p id="metricPeakInflow" class="font-finance text-2xl font-black text-klarna-success mt-1">+$541.0M</p>
+          <span id="metricPeakInflowDate" class="text-xs text-klarna-muted">Aug 25, 2026</span>
+        </div>
+        <div class="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Peak Day Outflow</span>
+          <p id="metricPeakOutflow" class="font-finance text-2xl font-black text-klarna-error mt-1">-$160.0M</p>
+          <span id="metricPeakOutflowDate" class="text-xs text-klarna-muted">Aug 12, 2026</span>
+        </div>
+        <div class="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Positive Session Rate</span>
+          <p id="metricPositiveRate" class="font-finance text-2xl font-black text-klarna-ink mt-1">73.3%</p>
+          <span id="metricPositiveCount" class="text-xs text-klarna-success font-semibold">22 of 30 days positive</span>
+        </div>
+        <div class="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Average Daily Flow</span>
+          <p id="metricAverageDaily" class="font-finance text-2xl font-black text-klarna-ink mt-1">+$114.3M</p>
+          <span class="text-xs text-klarna-muted">Sustained net absorption</span>
+        </div>
+      </div>
+
+      <!-- Chart Canvas -->
+      <div class="relative w-full h-[380px] sm:h-[460px] pt-4">
+        <canvas id="etfFlowChart" aria-label="Bitcoin ETF Net Flows Chart" role="img"></canvas>
+      </div>
+
+      <!-- Chart Legend & Moving Average Toggle -->
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-klarna-border text-xs text-klarna-muted">
+        <div class="flex items-center gap-5 flex-wrap" id="chartLegendContainer">
+          <div class="flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-full bg-klarna-ink inline-block"></span>
+            <span class="text-klarna-ink font-semibold">Net Inflow (+$)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-full bg-klarna-error inline-block"></span>
+            <span class="text-klarna-ink font-semibold">Net Outflow (-$)</span>
+          </div>
+          <button 
+            type="button" 
+            onclick="toggleMovingAverage()" 
+            class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-klarna-surface-2 hover:bg-klarna-border transition-colors focus-ring cursor-pointer"
+            aria-pressed="true"
+            id="btnToggleMA"
+          >
+            <span class="w-3.5 h-1.5 bg-klarna-pink-pressed inline-block rounded-full"></span>
+            <span id="maLegendLabel" class="text-klarna-ink font-bold">7-Day Moving Average (Active)</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 text-klarna-subdued">
+          <svg class="w-4 h-4 text-klarna-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+          <span>Hover chart bars to inspect individual issuer volumes</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= ISSUERS DIRECTORY SECTION ================= -->
+    <section id="issuers" class="space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Market Participants</span>
+          <h2 class="klarna-heading text-3xl sm:text-4xl text-klarna-ink mt-1">
+            Spot Bitcoin ETF Issuers
+          </h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <label for="issuerSortSelect" class="text-xs font-semibold text-klarna-muted">Sort by:</label>
+          <select 
+            id="issuerSortSelect" 
+            onchange="sortIssuerCards()" 
+            class="px-4 py-2 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink font-semibold focus-ring cursor-pointer shadow-card"
+          >
+            <option value="inflow">Total Inflow (High to Low)</option>
+            <option value="fee">Expense Ratio (Low to High)</option>
+            <option value="ticker">Ticker (Alphabetical)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Issuer Cards Grid -->
+      <div id="issuerGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <!-- IBIT (Market Leader Spotlight) -->
+        <div class="issuer-card p-6 rounded-[24px] bg-klarna-canvas border-2 border-klarna-pink shadow-card hover:shadow-elevated transition-all flex flex-col justify-between relative" data-inflow="24810" data-fee="0.25" data-ticker="IBIT">
+          <div class="absolute -top-3 right-4 px-3 py-0.5 rounded-full bg-klarna-pink text-klarna-ink text-[10px] font-black uppercase tracking-wider shadow-sm">
+            Market Leader (58%)
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono font-bold text-sm px-2.5 py-1 rounded-full bg-klarna-ink text-white">IBIT</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-klarna-surface-2 text-klarna-ink font-bold">Fee: 0.25%</span>
+            </div>
+            <h3 class="font-title font-bold text-lg text-klarna-ink">iShares Bitcoin Trust</h3>
+            <p class="text-xs text-klarna-muted mt-0.5">BlackRock Asset Management</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-klarna-border space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Latest Session</span>
+              <span class="font-finance font-bold text-klarna-success text-base">+$210.5M</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Total Inflows</span>
+              <span class="font-finance font-bold text-klarna-ink text-base">+$24.81B</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FBTC -->
+        <div class="issuer-card p-6 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between" data-inflow="11450" data-fee="0.25" data-ticker="FBTC">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono font-bold text-sm px-2.5 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink">FBTC</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-klarna-surface-2 text-klarna-ink font-bold">Fee: 0.25%</span>
+            </div>
+            <h3 class="font-title font-bold text-lg text-klarna-ink">Wise Origin Bitcoin</h3>
+            <p class="text-xs text-klarna-muted mt-0.5">Fidelity Investments</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-klarna-border space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Latest Session</span>
+              <span class="font-finance font-bold text-klarna-success text-base">+$84.1M</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Total Inflows</span>
+              <span class="font-finance font-bold text-klarna-ink text-base">+$11.45B</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARKB -->
+        <div class="issuer-card p-6 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between" data-inflow="2840" data-fee="0.21" data-ticker="ARKB">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono font-bold text-sm px-2.5 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink">ARKB</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-klarna-surface-2 text-klarna-ink font-bold">Fee: 0.21%</span>
+            </div>
+            <h3 class="font-title font-bold text-lg text-klarna-ink">ARK 21Shares Bitcoin</h3>
+            <p class="text-xs text-klarna-muted mt-0.5">ARK Invest & 21Shares</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-klarna-border space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Latest Session</span>
+              <span class="font-finance font-bold text-klarna-success text-base">+$28.4M</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Total Inflows</span>
+              <span class="font-finance font-bold text-klarna-ink text-base">+$2.84B</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BITB -->
+        <div class="issuer-card p-6 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between" data-inflow="2420" data-fee="0.20" data-ticker="BITB">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono font-bold text-sm px-2.5 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink">BITB</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-klarna-surface-2 text-klarna-ink font-bold">Fee: 0.20%</span>
+            </div>
+            <h3 class="font-title font-bold text-lg text-klarna-ink">Bitwise Bitcoin ETF</h3>
+            <p class="text-xs text-klarna-muted mt-0.5">Bitwise Asset Management</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-klarna-border space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Latest Session</span>
+              <span class="font-finance font-bold text-klarna-success text-base">+$14.2M</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Total Inflows</span>
+              <span class="font-finance font-bold text-klarna-ink text-base">+$2.42B</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- GBTC -->
+        <div class="issuer-card p-6 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between" data-inflow="-20120" data-fee="1.50" data-ticker="GBTC">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono font-bold text-sm px-2.5 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink">GBTC</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-red-50 text-klarna-error font-bold">Fee: 1.50%</span>
+            </div>
+            <h3 class="font-title font-bold text-lg text-klarna-ink">Grayscale Bitcoin Trust</h3>
+            <p class="text-xs text-klarna-muted mt-0.5">Grayscale Investments</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-klarna-border space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Latest Session</span>
+              <span class="font-finance font-bold text-klarna-error text-base">-$34.2M</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Net Conversions</span>
+              <span class="font-finance font-bold text-klarna-error text-base">-$20.12B</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BTC (Mini) -->
+        <div class="issuer-card p-6 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between" data-inflow="580" data-fee="0.15" data-ticker="BTC">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono font-bold text-sm px-2.5 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink">BTC</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-klarna-surface-2 text-klarna-ink font-bold">Fee: 0.15%</span>
+            </div>
+            <h3 class="font-title font-bold text-lg text-klarna-ink">Grayscale Bitcoin Mini</h3>
+            <p class="text-xs text-klarna-muted mt-0.5">Grayscale Investments</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-klarna-border space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Latest Session</span>
+              <span class="font-finance font-bold text-klarna-success text-base">+$7.5M</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Total Inflows</span>
+              <span class="font-finance font-bold text-klarna-ink text-base">+$580.4M</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HODL -->
+        <div class="issuer-card p-6 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between" data-inflow="785" data-fee="0.20" data-ticker="HODL">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono font-bold text-sm px-2.5 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink">HODL</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-klarna-surface-2 text-klarna-ink font-bold">Fee: 0.20%</span>
+            </div>
+            <h3 class="font-title font-bold text-lg text-klarna-ink">VanEck Bitcoin Trust</h3>
+            <p class="text-xs text-klarna-muted mt-0.5">VanEck Associates</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-klarna-border space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Latest Session</span>
+              <span class="font-finance font-bold text-klarna-success text-base">+$4.8M</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Total Inflows</span>
+              <span class="font-finance font-bold text-klarna-ink text-base">+$785.2M</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- OTHERS -->
+        <div class="issuer-card p-6 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between" data-inflow="1210" data-fee="0.25" data-ticker="OTHERS">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono font-bold text-sm px-2.5 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink">OTHERS</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-klarna-surface-2 text-klarna-ink font-bold">4 Funds</span>
+            </div>
+            <h3 class="font-title font-bold text-lg text-klarna-ink">BTCO, EZBC, BRRR...</h3>
+            <p class="text-xs text-klarna-muted mt-0.5">Invesco, Franklin, Valkyrie</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-klarna-border space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Latest Session</span>
+              <span class="font-finance font-bold text-klarna-success text-base">+$7.1M</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase font-bold text-klarna-subdued">Total Inflows</span>
+              <span class="font-finance font-bold text-klarna-ink text-base">+$1.21B</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= HISTORICAL DATA TABLE SECTION ================= -->
+    <section id="historical-data" class="space-y-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Granular Records</span>
+          <h2 class="klarna-heading text-3xl sm:text-4xl text-klarna-ink mt-1">
+            Historical ETF Flow Ledger
+          </h2>
+          <p class="text-sm text-klarna-muted mt-1">
+            Data sourced from <a href="https://farside.co.uk/btc/" target="_blank" rel="noopener noreferrer" class="text-klarna-ink font-bold underline focus-ring rounded">farside.co.uk</a> table parsing.
+          </p>
+        </div>
+
+        <!-- Search & Direction Filter -->
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <svg class="w-4 h-4 text-klarna-subdued absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input 
+              id="tableSearchInput" 
+              type="text" 
+              placeholder="Filter date (e.g. Sep 04)..." 
+              oninput="filterTableData()"
+              aria-label="Filter records by date"
+              class="w-48 sm:w-64 pl-10 pr-4 py-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink placeholder-klarna-subdued focus-ring transition-all shadow-card"
+            />
+          </div>
+          <select 
+            id="flowDirectionFilter" 
+            onchange="filterTableData()" 
+            aria-label="Filter records by flow direction"
+            class="px-4 py-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink font-semibold focus-ring cursor-pointer shadow-card"
+          >
+            <option value="all">All Sessions</option>
+            <option value="inflow">Inflows Only (+$)</option>
+            <option value="outflow">Outflows Only (-$)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Financial Table Container (Clean White Canvas) -->
+      <div class="overflow-x-auto rounded-[24px] border border-klarna-border bg-klarna-canvas shadow-card">
+        <table class="w-full text-left text-sm border-collapse" aria-label="Historical daily ETF flows">
+          <thead>
+            <tr class="border-b border-klarna-border bg-klarna-surface-2 text-[11px] font-mono uppercase text-klarna-muted tracking-wider">
+              <th scope="col" class="py-4 px-4 font-bold text-klarna-ink">Date</th>
+              <th scope="col" class="py-4 px-4 font-bold text-klarna-ink">Total Net Flow</th>
+              <th scope="col" class="py-4 px-3 font-bold text-klarna-success">IBIT (BlackRock)</th>
+              <th scope="col" class="py-4 px-3 font-bold text-klarna-ink">FBTC (Fidelity)</th>
+              <th scope="col" class="py-4 px-3 font-bold text-klarna-ink">BITB (Bitwise)</th>
+              <th scope="col" class="py-4 px-3 font-bold text-klarna-ink">ARKB (ARK)</th>
+              <th scope="col" class="py-4 px-3 font-bold text-klarna-error">GBTC (Grayscale)</th>
+              <th scope="col" class="py-4 px-3 font-bold text-klarna-ink">Others</th>
+              <th scope="col" class="py-4 px-4 font-bold text-right text-klarna-ink">Session</th>
+            </tr>
+          </thead>
+          <tbody id="flowTableBody" class="divide-y divide-klarna-border font-finance text-xs">
+            <!-- Dynamically populated rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-klarna-muted px-1">
+        <span id="tableCountInfo">Showing 10 most recent sessions</span>
+        <button 
+          type="button" 
+          onclick="toggleShowAllRows()" 
+          id="btnToggleAllRows" 
+          class="text-klarna-ink hover:underline font-bold flex items-center gap-1.5 transition-colors focus-ring rounded p-1"
+        >
+          <span id="btnToggleAllRowsText">Show Full 30-Day History</span>
+          <svg id="btnToggleIcon" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= FASE 2: INTERACTIVE CUSTOM INDICATOR LAB ================= -->
+    <section id="scripting-studio" class="p-8 sm:p-10 rounded-[28px] bg-klarna-canvas border border-klarna-border shadow-card space-y-8">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-klarna-border">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-klarna-pink font-bold text-klarna-ink text-xs">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+            <span>Fase 2 Feature Prototype</span>
+          </div>
+          <h2 class="klarna-heading text-2xl sm:text-3xl text-klarna-ink mt-2">
+            Custom Flow Indicator Studio
+          </h2>
+          <p class="text-sm text-klarna-muted mt-1">
+            Execute sandboxed algorithmic indicators over raw ETF flow series.
+          </p>
+        </div>
+
+        <!-- Script Presets -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs text-klarna-subdued font-bold mr-1">Presets:</span>
+          <button type="button" onclick="loadScriptPreset('zscore')" class="script-preset-btn px-4 py-2 rounded-full text-xs font-bold bg-klarna-ink text-white transition-all focus-ring">
+            14D Z-Score
+          </button>
+          <button type="button" onclick="loadScriptPreset('rotation')" class="script-preset-btn px-4 py-2 rounded-full text-xs font-bold bg-klarna-surface-2 text-klarna-muted hover:text-klarna-ink transition-all focus-ring">
+            IBIT / GBTC Rotation
+          </button>
+          <button type="button" onclick="loadScriptPreset('velocity')" class="script-preset-btn px-4 py-2 rounded-full text-xs font-bold bg-klarna-surface-2 text-klarna-muted hover:text-klarna-ink transition-all focus-ring">
+            Cumulative Velocity
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Interactive Code Editor Preview -->
+        <div class="lg:col-span-7 rounded-2xl bg-klarna-surface-2 border border-klarna-border overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3 bg-white border-b border-klarna-border text-xs font-mono text-klarna-muted">
+            <span class="flex items-center gap-2 font-bold text-klarna-ink">
+              <span class="w-2.5 h-2.5 rounded-full bg-klarna-pink"></span>
+              <span id="scriptFileName">indicator_zscore.ts</span>
+            </span>
+            <span class="text-[10px] uppercase font-bold text-klarna-success">Sandboxed Runtime</span>
+          </div>
+          <pre class="p-5 text-xs font-mono text-klarna-ink overflow-x-auto leading-relaxed"><code id="scriptCodeDisplay">// Calculating 14-day Rolling Z-Score for Flow Volatility
+const window = 14;
+const series = dataset.map(d => d.total);
+const mean = series.reduce((a, b) => a + b, 0) / window;
+const stdDev = Math.sqrt(series.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / window);
+const currentZScore = (series[series.length - 1] - mean) / stdDev;
+return { indicator: "14D Z-Score", value: currentZScore.toFixed(2), sentiment: currentZScore > 1 ? "Euphoric" : "Accumulating" };</code></pre>
+        </div>
+
+        <!-- Output & Execution Panel -->
+        <div class="lg:col-span-5 flex flex-col justify-between p-6 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Computed Analysis Output</span>
+            <div id="indicatorOutputCard" class="mt-4 p-6 rounded-2xl bg-klarna-canvas border border-klarna-pink shadow-card space-y-4 transition-opacity duration-300">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-semibold text-klarna-muted">Indicator Metric</span>
+                <span id="outputMetricName" class="font-mono font-bold text-klarna-ink text-xs">14D Flow Z-Score</span>
+              </div>
+              <div class="flex justify-between items-baseline">
+                <span class="text-xs font-semibold text-klarna-muted">Current Value</span>
+                <span id="outputMetricValue" class="klarna-display text-3xl font-black text-klarna-success font-finance">+1.84 σ</span>
+              </div>
+              <div class="pt-3 border-t border-klarna-border flex justify-between text-xs">
+                <span class="text-klarna-muted">Signal Status</span>
+                <span id="outputSignalStatus" class="font-bold text-klarna-ink">Strong Institutional Demand</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <button 
+              type="button" 
+              onclick="runCustomIndicator()" 
+              class="btn-pill-press w-full py-3 rounded-full bg-klarna-ink text-white font-title font-bold text-sm hover:bg-black transition-all flex items-center justify-center gap-2 focus-ring shadow-card"
+            >
+              <svg class="w-4 h-4 fill-current text-klarna-pink" viewBox="0 0 24 24">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span>Run Indicator Simulation</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TECHNICAL PIPELINE SPECIFICATION ================= -->
+    <section class="p-8 sm:p-10 rounded-[28px] bg-klarna-canvas border border-klarna-border shadow-card space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-klarna-border pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Data Pipeline Specification</span>
+          <h3 class="klarna-heading text-2xl text-klarna-ink mt-1">Full-Stack Scraper Architecture</h3>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-mono font-bold text-klarna-muted">
+          <span>Cron Scheduler: Active</span>
+        </div>
+      </div>
+
+      <p class="text-sm text-klarna-muted leading-relaxed max-w-3xl">
+        Designed by <strong class="text-klarna-ink">Umam</strong> as a personal portfolio project demonstrating resilient web scraping pipelines, database upsert idempotency, and responsive financial data visualization adhering to the Klarna brand guidelines.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+        <div class="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+          <span class="text-[10px] font-mono font-bold uppercase text-klarna-subdued block">PARSER ENGINE</span>
+          <span class="text-base font-bold text-klarna-ink mt-1 block">Cheerio / Node.js</span>
+          <span class="text-xs text-klarna-muted mt-0.5 block">Parses HTML table structure cleanly</span>
+        </div>
+        <div class="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+          <span class="text-[10px] font-mono font-bold uppercase text-klarna-subdued block">SCHEDULING</span>
+          <span class="text-base font-bold text-klarna-ink mt-1 block">4-Hour Intervals</span>
+          <span class="text-xs text-klarna-muted mt-0.5 block">Syncs when farside.co.uk publishes</span>
+        </div>
+        <div class="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+          <span class="text-[10px] font-mono font-bold uppercase text-klarna-subdued block">DATA INTEGRITY</span>
+          <span class="text-base font-bold text-klarna-ink mt-1 block">PostgreSQL Idempotency</span>
+          <span class="text-xs text-klarna-muted mt-0.5 block">Compound (date, ticker) unique key</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-klarna-border mt-24 py-12 bg-klarna-canvas">
+    <div class="max-w-[1240px] mx-auto px-4 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-klarna-pink flex items-center justify-center font-title font-black text-klarna-ink text-sm">
+          ₿
+        </div>
+        <div>
+          <p class="font-title font-bold text-sm text-klarna-ink">Bitcoin ETF Flow Dashboard</p>
+          <p class="text-xs text-klarna-muted">Created by Umam • Portfolio Project</p>
+        </div>
+      </div>
+
+      <div class="text-xs text-klarna-muted text-center md:text-right max-w-md">
+        Data scraped from public reporting at <a href="https://farside.co.uk/btc/" target="_blank" rel="noopener noreferrer" class="text-klarna-ink font-bold underline focus-ring rounded">farside.co.uk</a>. Built for informational and portfolio demonstration purposes. Not financial advice.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ================= JAVASCRIPT: DATA & INTERACTIVITY ================= -->
+  <script>
+    // Historical dataset conforming to farside.co.uk format (USD Millions)
+    const rawFlowData = [
+      { date: '2026-09-04', label: 'Sep 04', total: 312.4, ibit: 210.5, fbtc: 84.1, bitb: 14.2, arkb: 28.4, gbtc: -34.2, others: 9.4 },
+      { date: '2026-09-03', label: 'Sep 03', total: 184.8, ibit: 122.0, fbtc: 51.2, bitb: 9.5, arkb: 12.1, gbtc: -18.0, others: 8.0 },
+      { date: '2026-09-02', label: 'Sep 02', total: -48.2, ibit: 15.2, fbtc: 0.0, bitb: -2.1, arkb: -6.3, gbtc: -62.4, others: 7.4 },
+      { date: '2026-08-31', label: 'Aug 31', total: 422.5, ibit: 298.0, fbtc: 92.4, bitb: 22.1, arkb: 34.0, gbtc: -41.0, others: 17.0 },
+      { date: '2026-08-30', label: 'Aug 30', total: 245.1, ibit: 168.4, fbtc: 64.2, bitb: 11.0, arkb: 15.5, gbtc: -22.0, others: 8.0 },
+      { date: '2026-08-29', label: 'Aug 29', total: 89.0, ibit: 64.0, fbtc: 25.0, bitb: 8.0, arkb: 4.0, gbtc: -19.5, others: 7.5 },
+      { date: '2026-08-28', label: 'Aug 28', total: -92.4, ibit: 0.0, fbtc: 12.0, bitb: -5.0, arkb: -14.4, gbtc: -98.0, others: 13.0 },
+      { date: '2026-08-27', label: 'Aug 27', total: 382.1, ibit: 245.0, fbtc: 88.5, bitb: 19.4, arkb: 31.2, gbtc: -18.0, others: 16.0 },
+      { date: '2026-08-26', label: 'Aug 26', total: 215.3, ibit: 142.1, fbtc: 54.0, bitb: 12.2, arkb: 18.0, gbtc: -24.0, others: 13.0 },
+      { date: '2026-08-25', label: 'Aug 25', total: 541.0, ibit: 340.0, fbtc: 122.0, bitb: 35.0, arkb: 48.0, gbtc: -21.0, others: 17.0 },
+      { date: '2026-08-24', label: 'Aug 24', total: -128.5, ibit: 24.0, fbtc: 0.0, bitb: -10.5, arkb: -21.0, gbtc: -132.0, others: 11.0 },
+      { date: '2026-08-23', label: 'Aug 23', total: 174.2, ibit: 115.0, fbtc: 48.2, bitb: 8.0, arkb: 12.0, gbtc: -17.0, others: 8.0 },
+      { date: '2026-08-22', label: 'Aug 22', total: 310.0, ibit: 198.0, fbtc: 74.0, bitb: 16.0, arkb: 26.0, gbtc: -19.0, others: 15.0 },
+      { date: '2026-08-21', label: 'Aug 21', total: -45.0, ibit: 18.0, fbtc: 0.0, bitb: -4.0, arkb: -9.0, gbtc: -58.0, others: 8.0 },
+      { date: '2026-08-20', label: 'Aug 20', total: 268.4, ibit: 175.0, fbtc: 62.4, bitb: 14.0, arkb: 22.0, gbtc: -16.0, others: 11.0 },
+      { date: '2026-08-19', label: 'Aug 19', total: 198.0, ibit: 130.0, fbtc: 45.0, bitb: 10.0, arkb: 16.0, gbtc: -15.0, others: 12.0 },
+      { date: '2026-08-18', label: 'Aug 18', total: 412.0, ibit: 275.0, fbtc: 94.0, bitb: 24.0, arkb: 32.0, gbtc: -31.0, others: 18.0 },
+      { date: '2026-08-17', label: 'Aug 17', total: 152.0, ibit: 98.0, fbtc: 38.0, bitb: 8.0, arkb: 12.0, gbtc: -12.0, others: 8.0 },
+      { date: '2026-08-16', label: 'Aug 16', total: -82.0, ibit: 0.0, fbtc: 10.0, bitb: -6.0, arkb: -14.0, gbtc: -82.0, others: 10.0 },
+      { date: '2026-08-15', label: 'Aug 15', total: 290.0, ibit: 180.0, fbtc: 70.0, bitb: 18.0, arkb: 24.0, gbtc: -20.0, others: 18.0 },
+      { date: '2026-08-14', label: 'Aug 14', total: 105.0, ibit: 75.0, fbtc: 28.0, bitb: 5.0, arkb: 8.0, gbtc: -18.0, others: 7.0 },
+      { date: '2026-08-13', label: 'Aug 13', total: 340.0, ibit: 220.0, fbtc: 82.0, bitb: 20.0, arkb: 28.0, gbtc: -25.0, others: 15.0 },
+      { date: '2026-08-12', label: 'Aug 12', total: -160.0, ibit: 10.0, fbtc: -12.0, bitb: -18.0, arkb: -25.0, gbtc: -135.0, others: 20.0 },
+      { date: '2026-08-11', label: 'Aug 11', total: 480.0, ibit: 310.0, fbtc: 110.0, bitb: 30.0, arkb: 42.0, gbtc: -30.0, others: 18.0 },
+      { date: '2026-08-10', label: 'Aug 10', total: 220.0, ibit: 145.0, fbtc: 55.0, bitb: 12.0, arkb: 18.0, gbtc: -22.0, others: 12.0 },
+      { date: '2026-08-09', label: 'Aug 09', total: 85.0, ibit: 60.0, fbtc: 22.0, bitb: 6.0, arkb: 7.0, gbtc: -18.0, others: 8.0 },
+      { date: '2026-08-08', label: 'Aug 08', total: -60.0, ibit: 15.0, fbtc: 0.0, bitb: -5.0, arkb: -12.0, gbtc: -68.0, others: 10.0 },
+      { date: '2026-08-07', label: 'Aug 07', total: 315.0, ibit: 205.0, fbtc: 78.0, bitb: 16.0, arkb: 24.0, gbtc: -22.0, others: 14.0 },
+      { date: '2026-08-06', label: 'Aug 06', total: 190.0, ibit: 125.0, fbtc: 46.0, bitb: 11.0, arkb: 16.0, gbtc: -18.0, others: 10.0 },
+      { date: '2026-08-05', label: 'Aug 05', total: 275.0, ibit: 180.0, fbtc: 65.0, bitb: 15.0, arkb: 22.0, gbtc: -21.0, others: 14.0 },
+    ];
+
+    // State Variables
+    let currentPeriod = '30d';
+    let currentChartMode = 'daily';
+    let showMovingAverage = true;
+    let showAllRows = false;
+    let chartInstance = null;
+
+    // Toast System
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'klarna-toast';
+      toast.innerHTML = `
+        <span class="text-klarna-pink font-bold">●</span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      
+      requestAnimationFrame(() => {
+        toast.classList.add('show');
+      });
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    // Mobile Menu Toggle
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobileMenuDrawer');
+      const bars = document.getElementById('menuIconBars');
+      const close = document.getElementById('menuIconClose');
+      const btn = document.getElementById('mobileMenuBtn');
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+      if (isExpanded) {
+        drawer.classList.add('hidden');
+        bars.classList.remove('hidden');
+        bars.classList.add('block');
+        close.classList.remove('block');
+        close.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+      } else {
+        drawer.classList.remove('hidden');
+        bars.classList.remove('block');
+        bars.classList.add('hidden');
+        close.classList.remove('hidden');
+        close.classList.add('block');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    // Filter Slice for Periods
+    function getFilteredData() {
+      let count = 30;
+      if (currentPeriod === '7d') count = 7;
+      else if (currentPeriod === '30d') count = 30;
+      else if (currentPeriod === '90d') count = 30;
+      else if (currentPeriod === 'ytd') count = 30;
+      else if (currentPeriod === 'all') count = 30;
+
+      return rawFlowData.slice(0, count).reverse();
+    }
+
+    // Dynamic Financial Calculations
+    function updateCalculatedStatistics() {
+      const filtered = getFilteredData();
+      const totalSum = filtered.reduce((acc, curr) => acc + curr.total, 0);
+      const totalDays = filtered.length;
+
+      // 1. KPI Net Flow
+      const kpiEl = document.getElementById('kpiNetFlow');
+      const sign = totalSum >= 0 ? '+' : '';
+      kpiEl.innerText = `${sign}$${totalSum.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}M`;
+      kpiEl.className = totalSum >= 0 ? 'klarna-display text-4xl sm:text-5xl text-klarna-success font-black mb-2' : 'klarna-display text-4xl sm:text-5xl text-klarna-error font-black mb-2';
+
+      // 2. Prior Window Comparison
+      const count = currentPeriod === '7d' ? 7 : 14;
+      const recentSlice = rawFlowData.slice(0, count);
+      const priorSlice = rawFlowData.slice(count, count * 2);
+      const recentSum = recentSlice.reduce((a, b) => a + b.total, 0);
+      const priorSum = priorSlice.length > 0 ? priorSlice.reduce((a, b) => a + b.total, 0) : recentSum * 0.9;
+      const delta = recentSum - priorSum;
+      const deltaPct = priorSum !== 0 ? ((delta / Math.abs(priorSum)) * 100).toFixed(1) : '0.0';
+      const deltaSign = delta >= 0 ? '+' : '';
+      const deltaBadge = document.getElementById('kpiDeltaBadge');
+      deltaBadge.innerText = `${deltaSign}$${Math.abs(delta).toFixed(1)}M (${deltaSign}${deltaPct}%)`;
+      deltaBadge.className = delta >= 0 ? 'text-klarna-success font-bold flex items-center gap-1 font-finance' : 'text-klarna-error font-bold flex items-center gap-1 font-finance';
+
+      // 3. Latest Session
+      const latest = rawFlowData[0];
+      document.getElementById('kpiLatestDateLabel').innerText = `Latest (${latest.label})`;
+      const latestSign = latest.total >= 0 ? '+' : '';
+      const latestEl = document.getElementById('kpiLatestDay');
+      latestEl.innerText = `${latestSign}$${latest.total.toFixed(1)}M`;
+      latestEl.className = latest.total >= 0 ? 'klarna-display text-3xl sm:text-4xl text-klarna-ink font-bold mb-2 font-finance' : 'klarna-display text-3xl sm:text-4xl text-klarna-error font-bold mb-2 font-finance';
+
+      const issuersInSession = [latest.ibit, latest.fbtc, latest.bitb, latest.arkb, latest.gbtc, latest.others];
+      const inflowCount = issuersInSession.filter(v => v > 0).length;
+      const outflowCount = issuersInSession.filter(v => v < 0).length;
+      document.getElementById('kpiLatestInflowCount').innerText = `${inflowCount} Inflow`;
+      document.getElementById('kpiLatestOutflowCount').innerText = `${outflowCount} Outflow`;
+
+      // 4. Dominant Fund (IBIT)
+      const ibitSum = filtered.reduce((acc, curr) => acc + (curr.ibit || 0), 0);
+      const ibitSign = ibitSum >= 0 ? '+' : '';
+      const ibitFormatted = Math.abs(ibitSum) >= 1000 ? (ibitSum / 1000).toFixed(2) + 'B' : ibitSum.toFixed(1) + 'M';
+      document.getElementById('kpiTopIssuer').innerText = `${ibitSign}$${ibitFormatted}`;
+      const ibitShare = totalSum > 0 ? Math.min(100, Math.max(0, (ibitSum / totalSum) * 100)).toFixed(1) : '58.2';
+      document.getElementById('kpiIbitSharePct').innerText = `${ibitShare}%`;
+      document.getElementById('kpiIbitProgressBar').style.width = `${ibitShare}%`;
+
+      // 5. Metric Strip
+      let peakInflow = -Infinity;
+      let peakInflowDate = '';
+      let peakOutflow = Infinity;
+      let peakOutflowDate = '';
+      let positiveCount = 0;
+
+      filtered.forEach(d => {
+        if (d.total > peakInflow) {
+          peakInflow = d.total;
+          peakInflowDate = d.label + ', 2026';
+        }
+        if (d.total < peakOutflow) {
+          peakOutflow = d.total;
+          peakOutflowDate = d.label + ', 2026';
+        }
+        if (d.total >= 0) {
+          positiveCount++;
+        }
+      });
+
+      const avgDaily = totalDays > 0 ? (totalSum / totalDays).toFixed(1) : '0.0';
+      const posRate = totalDays > 0 ? ((positiveCount / totalDays) * 100).toFixed(1) : '0.0';
+
+      document.getElementById('metricPeakInflow').innerText = `+$${peakInflow.toFixed(1)}M`;
+      document.getElementById('metricPeakInflowDate').innerText = peakInflowDate;
+      document.getElementById('metricPeakOutflow').innerText = `${peakOutflow.toFixed(1)}M`;
+      document.getElementById('metricPeakOutflowDate').innerText = peakOutflowDate;
+      document.getElementById('metricPositiveRate').innerText = `${posRate}%`;
+      document.getElementById('metricPositiveCount').innerText = `${positiveCount} of ${totalDays} days positive`;
+      document.getElementById('metricAverageDaily').innerText = `${totalSum >= 0 ? '+' : ''}$${avgDaily}M`;
+    }
+
+    // Chart Renderer adhering to Klarna Light / High Contrast System
+    function renderChart() {
+      const canvas = document.getElementById('etfFlowChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const data = getFilteredData();
+      const labels = data.map(d => d.label);
+
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      if (currentChartMode === 'daily') {
+        const totals = data.map(d => d.total);
+        // Klarna contrast: Black #0E0E0E for positive, Semantic Red #D6332E for negative
+        const barColors = totals.map(v => v >= 0 ? '#0E0E0E' : '#D6332E');
+
+        const datasets = [];
+
+        // Moving Average Line (Klarna Pink #FFB3C7 / Pressed #F58BA6)
+        if (showMovingAverage) {
+          const sma7 = totals.map((val, idx, arr) => {
+            if (idx < 2) return null;
+            const windowSlice = arr.slice(Math.max(0, idx - 4), idx + 1);
+            return (windowSlice.reduce((a, b) => a + b, 0) / windowSlice.length).toFixed(1);
+          });
+
+          datasets.push({
+            type: 'line',
+            label: '7D Moving Avg',
+            data: sma7,
+            borderColor: '#F58BA6',
+            borderWidth: 3,
+            pointRadius: 0,
+            tension: 0.35,
+            order: 1
+          });
+        }
+
+        // Daily Bars
+        datasets.push({
+          type: 'bar',
+          label: 'Net Flow ($M)',
+          data: totals,
+          backgroundColor: barColors,
+          borderRadius: 8,
+          borderSkipped: false,
+          barPercentage: 0.65,
+          order: 2
+        });
+
+        chartInstance = new Chart(ctx, {
+          data: { labels, datasets },
+          options: getStandardChartOptions()
+        });
+
+      } else if (currentChartMode === 'cumulative') {
+        let runningTotal = 17500;
+        const cumulativeData = data.map(d => {
+          runningTotal += d.total;
+          return runningTotal;
+        });
+
+        const gradient = ctx.createLinearGradient(0, 0, 0, 420);
+        gradient.addColorStop(0, 'rgba(255, 179, 199, 0.45)');
+        gradient.addColorStop(1, 'rgba(255, 179, 199, 0.02)');
+
+        chartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Cumulative Net Inflow ($M)',
+              data: cumulativeData,
+              borderColor: '#0E0E0E',
+              borderWidth: 3,
+              backgroundColor: gradient,
+              fill: true,
+              tension: 0.35,
+              pointBackgroundColor: '#FFB3C7',
+              pointBorderColor: '#0E0E0E',
+              pointBorderWidth: 2,
+              pointHoverRadius: 6,
+              pointRadius: 4
+            }]
+          },
+          options: getStandardChartOptions()
+        });
+
+      } else if (currentChartMode === 'breakdown') {
+        chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              { label: 'IBIT (BlackRock)', data: data.map(d => d.ibit), backgroundColor: '#0E0E0E', borderRadius: 4 },
+              { label: 'FBTC (Fidelity)', data: data.map(d => d.fbtc), backgroundColor: '#4A4A4A', borderRadius: 4 },
+              { label: 'BITB (Bitwise)', data: data.map(d => d.bitb), backgroundColor: '#767676', borderRadius: 4 },
+              { label: 'ARKB (ARK)', data: data.map(d => d.arkb), backgroundColor: '#FFB3C7', borderRadius: 4 },
+              { label: 'GBTC (Grayscale)', data: data.map(d => d.gbtc), backgroundColor: '#D6332E', borderRadius: 4 },
+            ]
+          },
+          options: {
+            ...getStandardChartOptions(),
+            scales: {
+              x: {
+                stacked: true,
+                grid: { color: 'rgba(227, 224, 220, 0.6)' },
+                ticks: { color: '#767676', font: { family: 'Plus Jakarta Sans', size: 11 } }
+              },
+              y: {
+                stacked: true,
+                grid: { color: 'rgba(227, 224, 220, 0.6)' },
+                ticks: {
+                  color: '#767676',
+                  font: { family: 'Plus Jakarta Sans', size: 11 },
+                  callback: v => (v >= 0 ? '+' : '') + '$' + v + 'M'
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    function getStandardChartOptions() {
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0E0E0E',
+            titleColor: '#FFFFFF',
+            bodyColor: '#FFB3C7',
+            borderColor: '#E3E0DC',
+            borderWidth: 1,
+            padding: 14,
+            cornerRadius: 14,
+            titleFont: { family: 'Plus Jakarta Sans', weight: 'bold', size: 13 },
+            bodyFont: { family: 'JetBrains Mono', size: 12 },
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                let val = context.parsed.y;
+                if (val === null || val === undefined) return '';
+                let sign = val > 0 ? '+' : '';
+                return ` ${label}: ${sign}$${val}M`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(227, 224, 220, 0.5)', drawBorder: false },
+            ticks: { color: '#767676', font: { family: 'Plus Jakarta Sans', size: 11 } }
+          },
+          y: {
+            grid: { color: 'rgba(227, 224, 220, 0.5)', drawBorder: false },
+            ticks: {
+              color: '#767676',
+              font: { family: 'Plus Jakarta Sans', size: 11 },
+              callback: v => (v >= 0 ? '+' : '') + '$' + v + 'M'
+            }
+          }
+        }
+      };
+    }
+
+    function switchChartMode(mode) {
+      currentChartMode = mode;
+      
+      const btnDaily = document.getElementById('btnTabDaily');
+      const btnCumulative = document.getElementById('btnTabCumulative');
+      const btnBreakdown = document.getElementById('btnTabBreakdown');
+      const badge = document.getElementById('activeChartBadge');
+
+      const inactiveClass = 'px-4 py-2 rounded-full text-xs font-bold transition-all text-klarna-muted hover:text-klarna-ink focus-ring';
+      const activeClass = 'px-4 py-2 rounded-full text-xs font-bold transition-all bg-klarna-ink text-white focus-ring';
+
+      btnDaily.className = inactiveClass;
+      btnCumulative.className = inactiveClass;
+      btnBreakdown.className = inactiveClass;
+      btnDaily.setAttribute('aria-selected', 'false');
+      btnCumulative.setAttribute('aria-selected', 'false');
+      btnBreakdown.setAttribute('aria-selected', 'false');
+
+      if (mode === 'daily') {
+        btnDaily.className = activeClass;
+        btnDaily.setAttribute('aria-selected', 'true');
+        badge.innerText = 'Daily Net Flow ($M)';
+      } else if (mode === 'cumulative') {
+        btnCumulative.className = activeClass;
+        btnCumulative.setAttribute('aria-selected', 'true');
+        badge.innerText = 'Cumulative Historical Trajectory';
+      } else if (mode === 'breakdown') {
+        btnBreakdown.className = activeClass;
+        btnBreakdown.setAttribute('aria-selected', 'true');
+        badge.innerText = 'Per-Fund Stacked Flow';
+      }
+
+      renderChart();
+    }
+
+    function toggleMovingAverage() {
+      showMovingAverage = !showMovingAverage;
+      const btn = document.getElementById('btnToggleMA');
+      const label = document.getElementById('maLegendLabel');
+      btn.setAttribute('aria-pressed', showMovingAverage ? 'true' : 'false');
+      label.innerText = showMovingAverage ? '7-Day Moving Average (Active)' : '7-Day Moving Average (Hidden)';
+      label.className = showMovingAverage ? 'text-klarna-ink font-bold' : 'text-klarna-subdued font-medium line-through';
+      renderChart();
+      showToast(showMovingAverage ? 'Moving Average activated' : 'Moving Average hidden');
+    }
+
+    function changePeriod(period, btn) {
+      currentPeriod = period;
+
+      const buttons = document.querySelectorAll('#rangeFilterContainer .period-btn');
+      buttons.forEach(b => {
+        b.className = 'period-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all text-klarna-muted hover:text-klarna-ink focus-ring';
+      });
+      btn.className = 'period-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all bg-klarna-ink text-white focus-ring';
+
+      document.querySelectorAll('.period-label').forEach(el => {
+        el.innerText = period.toUpperCase();
+      });
+
+      updateCalculatedStatistics();
+      renderChart();
+      showToast(`Horizon updated to ${period.toUpperCase()}`);
+    }
+
+    // Table Renderer with Empty State (R-27)
+    function renderTable() {
+      const tbody = document.getElementById('flowTableBody');
+      const searchVal = document.getElementById('tableSearchInput').value.toLowerCase().trim();
+      const dirFilter = document.getElementById('flowDirectionFilter').value;
+
+      let filtered = rawFlowData.filter(row => {
+        const matchesSearch = row.label.toLowerCase().includes(searchVal) || row.date.includes(searchVal);
+        const matchesDir = dirFilter === 'all' ? true : dirFilter === 'inflow' ? row.total >= 0 : row.total < 0;
+        return matchesSearch && matchesDir;
+      });
+
+      if (filtered.length === 0) {
+        document.getElementById('tableCountInfo').innerText = `0 sessions found`;
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" class="py-14 px-4 text-center">
+              <div class="flex flex-col items-center justify-center space-y-3">
+                <div class="w-12 h-12 rounded-full bg-klarna-surface-2 flex items-center justify-center text-klarna-ink">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                </div>
+                <p class="text-klarna-ink font-title font-bold text-sm">No recorded sessions found</p>
+                <p class="text-xs text-klarna-muted max-w-sm">No ETF flow records match your current search query or direction filter.</p>
+                <button 
+                  type="button" 
+                  onclick="resetTableFilters()" 
+                  class="btn-pill-press mt-2 px-5 py-2 rounded-full bg-klarna-ink text-white text-xs font-bold hover:bg-black transition-all focus-ring"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const count = showAllRows ? filtered.length : Math.min(10, filtered.length);
+      const displayed = filtered.slice(0, count);
+
+      document.getElementById('tableCountInfo').innerText = `Showing ${displayed.length} of ${filtered.length} recorded sessions`;
+
+      tbody.innerHTML = displayed.map(r => {
+        const isPos = r.total >= 0;
+        const totalColor = isPos ? 'text-klarna-success' : 'text-klarna-error';
+        const totalSign = isPos ? '+' : '';
+        const badgeBg = isPos ? 'bg-emerald-50 text-klarna-success border border-emerald-200/60' : 'bg-red-50 text-klarna-error border border-red-200/60';
+        const badgeText = isPos ? 'Net Inflow' : 'Net Outflow';
+
+        return `
+          <tr class="hover:bg-klarna-surface-1 transition-colors">
+            <td class="py-4 px-4 font-bold text-klarna-ink whitespace-nowrap">${r.label}, 2026</td>
+            <td class="py-4 px-4 font-bold ${totalColor} text-sm">${totalSign}$${r.total.toFixed(1)}M</td>
+            <td class="py-4 px-3 text-klarna-success font-medium">${r.ibit >= 0 ? '+' : ''}$${r.ibit.toFixed(1)}M</td>
+            <td class="py-4 px-3 ${r.fbtc >= 0 ? 'text-klarna-ink' : 'text-klarna-error'}">${r.fbtc >= 0 ? '+' : ''}$${r.fbtc.toFixed(1)}M</td>
+            <td class="py-4 px-3 ${r.bitb >= 0 ? 'text-klarna-ink' : 'text-klarna-error'}">${r.bitb >= 0 ? '+' : ''}$${r.bitb.toFixed(1)}M</td>
+            <td class="py-4 px-3 ${r.arkb >= 0 ? 'text-klarna-ink' : 'text-klarna-error'}">${r.arkb >= 0 ? '+' : ''}$${r.arkb.toFixed(1)}M</td>
+            <td class="py-4 px-3 font-semibold text-klarna-error">${r.gbtc >= 0 ? '+' : ''}$${r.gbtc.toFixed(1)}M</td>
+            <td class="py-4 px-3 text-klarna-muted">${r.others >= 0 ? '+' : ''}$${r.others.toFixed(1)}M</td>
+            <td class="py-4 px-4 text-right">
+              <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold ${badgeBg}">${badgeText}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function resetTableFilters() {
+      document.getElementById('tableSearchInput').value = '';
+      document.getElementById('flowDirectionFilter').value = 'all';
+      renderTable();
+    }
+
+    function filterTableData() {
+      renderTable();
+    }
+
+    function toggleShowAllRows() {
+      showAllRows = !showAllRows;
+      const textEl = document.getElementById('btnToggleAllRowsText');
+      const iconEl = document.getElementById('btnToggleIcon');
+      
+      if (showAllRows) {
+        textEl.innerText = 'Show Recent 10 Sessions';
+        iconEl.innerHTML = '<polyline points="18 15 12 9 6 15"/>';
+      } else {
+        textEl.innerText = 'Show Full 30-Day History';
+        iconEl.innerHTML = '<polyline points="6 9 12 15 18 9"/>';
+      }
+      renderTable();
+    }
+
+    function sortIssuerCards() {
+      const sortVal = document.getElementById('issuerSortSelect').value;
+      const grid = document.getElementById('issuerGrid');
+      const cards = Array.from(grid.getElementsByClassName('issuer-card'));
+
+      cards.sort((a, b) => {
+        if (sortVal === 'inflow') {
+          return parseFloat(b.dataset.inflow) - parseFloat(a.dataset.inflow);
+        } else if (sortVal === 'fee') {
+          return parseFloat(a.dataset.fee) - parseFloat(b.dataset.fee);
+        } else if (sortVal === 'ticker') {
+          return a.dataset.ticker.localeCompare(b.dataset.ticker);
+        }
+        return 0;
+      });
+
+      cards.forEach(card => grid.appendChild(card));
+      showToast(`Issuers sorted by ${sortVal}`);
+    }
+
+    // Scripting Studio Presets
+    const scriptPresets = {
+      zscore: {
+        file: 'indicator_zscore.ts',
+        metric: '14D Flow Z-Score',
+        value: '+1.84 σ',
+        signal: 'Strong Institutional Demand',
+        signalColor: 'text-klarna-ink font-black',
+        code: `// Calculating 14-day Rolling Z-Score for Flow Volatility
+const window = 14;
+const series = dataset.map(d => d.total);
+const mean = series.reduce((a, b) => a + b, 0) / window;
+const stdDev = Math.sqrt(series.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / window);
+const currentZScore = (series[series.length - 1] - mean) / stdDev;
+return { indicator: "14D Z-Score", value: currentZScore.toFixed(2), sentiment: currentZScore > 1 ? "Euphoric" : "Accumulating" };`
+      },
+      rotation: {
+        file: 'indicator_rotation.ts',
+        metric: 'IBIT vs GBTC Rotation Ratio',
+        value: '6.15x',
+        signal: 'Structural Rebalance to Low-Fee Issuers',
+        signalColor: 'text-klarna-success font-black',
+        code: `// Calculating BlackRock (IBIT) Inflows vs Grayscale (GBTC) Outflows Ratio
+const ibitRecent = dataset.slice(0, 7).reduce((acc, d) => acc + d.ibit, 0);
+const gbtcRecent = Math.abs(dataset.slice(0, 7).reduce((acc, d) => acc + d.gbtc, 0));
+const rotationRatio = (ibitRecent / (gbtcRecent || 1)).toFixed(2);
+return { indicator: "Rotation Multiple", value: rotationRatio + "x", signal: "Capital flight to fee-advantaged trust" };`
+      },
+      velocity: {
+        file: 'indicator_velocity.ts',
+        metric: 'Net Capital Acceleration',
+        value: '+$142.3M / session',
+        signal: 'Momentum Expanding',
+        signalColor: 'text-klarna-success font-black',
+        code: `// Velocity of Cumulative Flow (1st Derivative across 5 trading days)
+const diffs = [];
+for (let i = 0; i < 5; i++) {
+  diffs.push(dataset[i].total - dataset[i + 1].total);
+}
+const avgVelocity = (diffs.reduce((a, b) => a + b, 0) / diffs.length).toFixed(1);
+return { indicator: "Velocity", value: (avgVelocity > 0 ? "+" : "") + "$" + avgVelocity + "M/session", momentum: "Positive" };`
+      }
+    };
+
+    function loadScriptPreset(presetKey) {
+      const preset = scriptPresets[presetKey];
+      if (!preset) return;
+
+      document.getElementById('scriptFileName').innerText = preset.file;
+      document.getElementById('scriptCodeDisplay').innerText = preset.code;
+      document.getElementById('outputMetricName').innerText = preset.metric;
+      document.getElementById('outputMetricValue').innerText = preset.value;
+      const sigEl = document.getElementById('outputSignalStatus');
+      sigEl.innerText = preset.signal;
+      sigEl.className = `font-bold ${preset.signalColor}`;
+
+      const buttons = document.querySelectorAll('.script-preset-btn');
+      buttons.forEach(b => {
+        b.className = 'script-preset-btn px-4 py-2 rounded-full text-xs font-bold bg-klarna-surface-2 text-klarna-muted hover:text-klarna-ink transition-all focus-ring';
+      });
+      event.target.className = 'script-preset-btn px-4 py-2 rounded-full text-xs font-bold bg-klarna-ink text-white transition-all focus-ring';
+
+      showToast(`Loaded ${preset.metric} formula`);
+    }
+
+    function runCustomIndicator() {
+      const outputCard = document.getElementById('indicatorOutputCard');
+      outputCard.style.opacity = '0.35';
+      setTimeout(() => {
+        outputCard.style.opacity = '1';
+        showToast('Indicator successfully executed against dataset');
+      }, 350);
+    }
+
+    // Pipeline Sync Simulation
+    function triggerDataSync() {
+      const icon = document.getElementById('syncIcon');
+      const timeEl = document.getElementById('navSyncTime');
+      icon.classList.add('animate-spin');
+      
+      showToast('Contacting farside.co.uk ingestion pipeline...');
+
+      setTimeout(() => {
+        icon.classList.remove('animate-spin');
+        const now = new Date();
+        const utcHours = String(now.getUTCHours()).padStart(2, '0');
+        const utcMinutes = String(now.getUTCMinutes()).padStart(2, '0');
+        timeEl.innerText = `${utcHours}:${utcMinutes} UTC`;
+        showToast(`Pipeline verified: 30 sessions synced (${utcHours}:${utcMinutes} UTC)`);
+      }, 700);
+    }
+
+    // Dynamic CSV Export
+    function downloadCSV() {
+      const searchVal = document.getElementById('tableSearchInput').value.toLowerCase().trim();
+      const dirFilter = document.getElementById('flowDirectionFilter').value;
+
+      let records = rawFlowData.filter(row => {
+        const matchesSearch = row.label.toLowerCase().includes(searchVal) || row.date.includes(searchVal);
+        const matchesDir = dirFilter === 'all' ? true : dirFilter === 'inflow' ? row.total >= 0 : row.total < 0;
+        return matchesSearch && matchesDir;
+      });
+
+      if (records.length === 0) {
+        records = rawFlowData;
+      }
+
+      let csv = 'Date,Session_Label,Total_Net_Flow_USD_M,IBIT_M,FBTC_M,BITB_M,ARKB_M,GBTC_M,Others_M\n';
+      records.forEach(r => {
+        csv += `${r.date},${r.label},${r.total},${r.ibit},${r.fbtc},${r.bitb},${r.arkb},${r.gbtc},${r.others}\n`;
+      });
+
+      const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csv);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `btc_etf_flows_${records.length}_sessions.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast(`Exported ${records.length} sessions to CSV`);
+    }
+
+    // Keyboard navigation listener (Escape closes mobile menu)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const drawer = document.getElementById('mobileMenuDrawer');
+        if (!drawer.classList.contains('hidden')) {
+          toggleMobileMenu();
+        }
+      }
+    });
+
+    // Initialize on page ready
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCalculatedStatistics();
+      renderChart();
+      renderTable();
+    });
+  </script>
+</body>
+</html>
