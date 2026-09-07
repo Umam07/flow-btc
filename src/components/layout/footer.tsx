@@ -9,7 +9,7 @@ export function Footer() {
             ₿
           </div>
           <div>
-            <p className="font-title font-bold text-sm text-klarna-ink">Bitcoin ETF Flow Dashboard</p>
+            <p className="font-title font-bold text-sm text-klarna-ink">BTC Flow</p>
             <p className="text-xs text-klarna-muted">Created by Umam • Portfolio Project</p>
           </div>
         </div>

@@ -49,7 +49,7 @@ export default function Home() {
   } = useFlowDashboard();
 
   return (
-    <div className="min-h-screen flex flex-col bg-klarna-surface-1 text-klarna-ink selection:bg-klarna-pink selection:text-klarna-ink antialiased w-full overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-klarna-surface-1 text-klarna-ink selection:bg-klarna-pink selection:text-klarna-ink antialiased w-full">
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

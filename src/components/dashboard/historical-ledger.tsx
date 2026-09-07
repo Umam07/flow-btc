@@ -72,16 +72,29 @@ export function HistoricalLedger({
               className="w-full pl-10 pr-4 py-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink placeholder-klarna-subdued focus-ring transition-all shadow-card"
             />
           </div>
-          <select
-            value={dirFilter}
-            onChange={(e) => onDirFilterChange(e.target.value as FlowDirectionFilter)}
-            aria-label="Filter records by flow direction"
-            className="w-full sm:w-auto px-4 py-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink font-semibold focus-ring cursor-pointer shadow-card"
-          >
-            <option value="all">All Sessions</option>
-            <option value="inflow">Inflows Only (+$)</option>
-            <option value="outflow">Outflows Only (-$)</option>
-          </select>
+          <div className="relative w-full sm:w-auto">
+            <select
+              value={dirFilter}
+              onChange={(e) => onDirFilterChange(e.target.value as FlowDirectionFilter)}
+              aria-label="Filter records by flow direction"
+              className="w-full sm:w-auto appearance-none pl-4 pr-10 py-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink font-semibold focus-ring cursor-pointer shadow-card"
+            >
+              <option value="all">All Sessions</option>
+              <option value="inflow">Inflows Only (+$)</option>
+              <option value="outflow">Outflows Only (-$)</option>
+            </select>
+            <svg
+              className="w-3.5 h-3.5 text-klarna-ink/70 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </div>
         </div>
       </div>
 

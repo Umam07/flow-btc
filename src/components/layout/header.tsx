@@ -28,7 +28,7 @@ export function Header({
           </div>
           <div className="flex items-baseline gap-1.5 sm:gap-2">
             <span className="font-title font-black text-lg sm:text-xl tracking-tight text-klarna-ink group-hover:opacity-80 transition-opacity">
-              BTC FLOW
+              BTC Flow
             </span>
             <span className="hidden lg:inline-block text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">
               ETF Tracker
