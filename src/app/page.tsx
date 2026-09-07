@@ -670,21 +670,21 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-klarna-surface-1 text-klarna-ink selection:bg-klarna-pink selection:text-klarna-ink antialiased">
+    <div className="min-h-screen flex flex-col bg-klarna-surface-1 text-klarna-ink selection:bg-klarna-pink selection:text-klarna-ink antialiased w-full overflow-x-hidden">
       {/* ================= TOP NAVBAR ================= */}
       <header className="sticky top-0 z-50 w-full border-b border-klarna-border bg-klarna-surface-1/90 backdrop-blur-md">
-        <div className="max-w-[1240px] mx-auto px-4 sm:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-8 h-16 sm:h-20 flex items-center justify-between gap-3 sm:gap-4">
           {/* Brand Logo / Wordmark */}
           <a
             href="#overview"
-            className="flex items-center gap-3 group focus-ring rounded-xl p-1 shrink-0"
+            className="flex items-center gap-2.5 sm:gap-3 group focus-ring rounded-xl p-1 shrink-0"
             aria-label="Bitcoin ETF Flow Dashboard Home"
           >
-            <div className="w-10 h-10 rounded-full bg-klarna-pink flex items-center justify-center font-title font-black text-klarna-ink text-lg transition-transform group-hover:scale-105 shadow-sm">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-klarna-pink flex items-center justify-center font-title font-black text-klarna-ink text-base sm:text-lg transition-transform group-hover:scale-105 shadow-sm">
               ₿
             </div>
-            <div className="flex items-baseline gap-2">
-              <span className="font-title font-black text-xl tracking-tight text-klarna-ink group-hover:opacity-80 transition-opacity">
+            <div className="flex items-baseline gap-1.5 sm:gap-2">
+              <span className="font-title font-black text-lg sm:text-xl tracking-tight text-klarna-ink group-hover:opacity-80 transition-opacity">
                 BTC FLOW
               </span>
               <span className="hidden lg:inline-block text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">
@@ -716,16 +716,16 @@ export default function Home() {
           </nav>
 
           {/* Right Action Bar */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Live Scraper Sync Pill */}
             <button
               type="button"
               onClick={handleTriggerSync}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-klarna-canvas border border-klarna-border hover:border-klarna-ink/30 text-xs text-klarna-muted hover:text-klarna-ink transition-all shadow-card focus-ring cursor-pointer"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full bg-klarna-canvas border border-klarna-border hover:border-klarna-ink/30 text-xs text-klarna-muted hover:text-klarna-ink transition-all shadow-card focus-ring cursor-pointer"
               title="Automated pipeline sync with farside.co.uk • Click to refresh"
               aria-label="Refresh Data Pipeline"
             >
-              <span className="text-xs font-mono font-medium hidden sm:inline">{syncTime}</span>
+              <span className="text-xs font-mono font-medium hidden md:inline">{syncTime}</span>
               <svg
                 className={`w-3.5 h-3.5 text-klarna-subdued ${isSyncing ? "animate-spin" : ""}`}
                 viewBox="0 0 24 24"
@@ -743,11 +743,11 @@ export default function Home() {
               <span className="text-xs font-bold text-klarna-ink">{isSyncing ? "Syncing..." : "Refresh"}</span>
             </button>
 
-            {/* Primary CTA: Confident Black Pill Button */}
+            {/* Primary CTA: Confident Black Pill Button (visible sm and up; inside mobile drawer on small screens) */}
             <button
               type="button"
               onClick={handleExportCSV}
-              className="btn-pill-press inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-klarna-ink text-white font-title font-bold text-sm hover:bg-black transition-all focus-ring shadow-card cursor-pointer"
+              className="btn-pill-press hidden sm:inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-klarna-ink text-white font-title font-bold text-sm hover:bg-black transition-all focus-ring shadow-card cursor-pointer"
               aria-label="Export dataset to CSV"
             >
               <svg className="w-4 h-4 text-klarna-pink" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
@@ -762,7 +762,7 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-klarna-ink hover:bg-klarna-surface-2 focus-ring transition-colors shadow-card cursor-pointer"
+              className="md:hidden p-2 sm:p-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-klarna-ink hover:bg-klarna-surface-2 focus-ring transition-colors shadow-card cursor-pointer"
               aria-label="Toggle navigation menu"
               aria-expanded={isMobileMenuOpen}
             >
@@ -784,35 +784,40 @@ export default function Home() {
 
         {/* Mobile Drawer */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-klarna-border bg-klarna-canvas px-6 py-6 space-y-4 shadow-elevated">
-            <nav className="flex flex-col space-y-3 text-base font-semibold text-klarna-muted" aria-label="Mobile Navigation">
-              <a href="#overview" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-klarna-ink hover:text-black transition-colors">
+          <div className="md:hidden border-t border-klarna-border bg-klarna-canvas px-5 py-5 space-y-4 shadow-elevated animate-in fade-in slide-in-from-top-2 duration-200">
+            <nav className="flex flex-col space-y-2 text-base font-semibold text-klarna-muted" aria-label="Mobile Navigation">
+              <a href="#overview" onClick={() => setIsMobileMenuOpen(false)} className="py-2.5 px-3 rounded-xl hover:bg-klarna-surface-1 text-klarna-ink hover:text-black transition-colors">
                 Overview
               </a>
-              <a href="#chart-section" onClick={() => setIsMobileMenuOpen(false)} className="py-2 hover:text-klarna-ink transition-colors">
+              <a href="#chart-section" onClick={() => setIsMobileMenuOpen(false)} className="py-2.5 px-3 rounded-xl hover:bg-klarna-surface-1 hover:text-klarna-ink transition-colors">
                 Dynamics
               </a>
-              <a href="#issuers" onClick={() => setIsMobileMenuOpen(false)} className="py-2 hover:text-klarna-ink transition-colors">
+              <a href="#issuers" onClick={() => setIsMobileMenuOpen(false)} className="py-2.5 px-3 rounded-xl hover:bg-klarna-surface-1 hover:text-klarna-ink transition-colors">
                 Issuers Directory
               </a>
-              <a href="#historical-data" onClick={() => setIsMobileMenuOpen(false)} className="py-2 hover:text-klarna-ink transition-colors">
+              <a href="#historical-data" onClick={() => setIsMobileMenuOpen(false)} className="py-2.5 px-3 rounded-xl hover:bg-klarna-surface-1 hover:text-klarna-ink transition-colors">
                 Historical Ledger
               </a>
-              <a href="#scripting-studio" onClick={() => setIsMobileMenuOpen(false)} className="py-2 hover:text-klarna-ink transition-colors flex items-center justify-between">
+              <a href="#scripting-studio" onClick={() => setIsMobileMenuOpen(false)} className="py-2.5 px-3 rounded-xl hover:bg-klarna-surface-1 hover:text-klarna-ink transition-colors flex items-center justify-between">
                 <span>Indicator Lab</span>
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] bg-klarna-pink font-bold text-klarna-ink font-mono">Fase 2</span>
               </a>
             </nav>
-            <div className="pt-4 border-t border-klarna-border">
+            <div className="pt-3 border-t border-klarna-border">
               <button
                 type="button"
                 onClick={() => {
                   handleExportCSV();
                   setIsMobileMenuOpen(false);
                 }}
-                className="w-full py-3 rounded-full bg-klarna-ink text-white font-title font-bold text-sm text-center cursor-pointer"
+                className="w-full py-3 rounded-full bg-klarna-ink text-white font-title font-bold text-sm text-center flex items-center justify-center gap-2 cursor-pointer shadow-card"
               >
-                Export CSV Data
+                <svg className="w-4 h-4 text-klarna-pink" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <span>Export CSV Dataset</span>
               </button>
             </div>
           </div>
@@ -820,33 +825,33 @@ export default function Home() {
       </header>
 
       {/* ================= MAIN CONTENT ================= */}
-      <main className="max-w-[1240px] mx-auto px-4 sm:px-8 py-12 sm:py-16 space-y-20 sm:space-y-24 flex-1">
+      <main className="w-full max-w-[1240px] mx-auto px-4 sm:px-8 py-8 sm:py-16 space-y-12 sm:space-y-24 flex-1 min-w-0">
         {/* ================= HERO BANNER ================= */}
-        <section id="overview" className="space-y-8">
-          <div className="p-8 sm:p-14 lg:p-16 rounded-[32px] bg-klarna-pink text-klarna-ink shadow-pink-glow relative overflow-hidden flex flex-col justify-between gap-10">
-            <div className="max-w-3xl space-y-6">
-              <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/80 border border-black/10 text-klarna-ink text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+        <section id="overview" className="w-full min-w-0 space-y-6 sm:space-y-8">
+          <div className="p-6 sm:p-12 lg:p-16 rounded-[24px] sm:rounded-[32px] bg-klarna-pink text-klarna-ink shadow-pink-glow relative overflow-hidden flex flex-col justify-between gap-6 sm:gap-10">
+            <div className="max-w-3xl space-y-4 sm:space-y-6">
+              <div className="inline-flex items-center px-3.5 sm:px-4 py-1.5 rounded-full bg-white/80 border border-black/10 text-klarna-ink text-[11px] sm:text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
                 <span>Institutional Capital Tracker</span>
               </div>
 
-              <h1 className="klarna-display text-4xl sm:text-6xl lg:text-7xl text-klarna-ink font-black">
+              <h1 className="klarna-display text-3xl sm:text-5xl lg:text-7xl text-klarna-ink font-black break-words">
                 Where institutional capital <br className="hidden sm:inline" />
                 flows into Bitcoin.
               </h1>
 
-              <p className="text-klarna-ink/85 text-base sm:text-xl font-medium leading-relaxed max-w-2xl">
+              <p className="text-klarna-ink/85 text-sm sm:text-lg lg:text-xl font-medium leading-relaxed max-w-2xl">
                 Live net inflows, redemptions, and historical liquidity trends across all 11 US Spot Bitcoin ETFs. Clean, transparent, and effortlessly accessible.
               </p>
             </div>
 
             {/* Period Horizon Selector */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-black/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pt-5 sm:pt-6 border-t border-black/10">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-klarna-ink/75">
                 <span>Horizon Window:</span>
                 <span className="text-klarna-ink font-black font-mono">{currentPeriod.toUpperCase()}</span>
               </div>
 
-              <div className="inline-flex p-1.5 rounded-full bg-white shadow-sm border border-black/5" role="group" aria-label="Time Horizon Filters">
+              <div className="inline-flex p-1 sm:p-1.5 rounded-full bg-white shadow-sm border border-black/5 overflow-x-auto no-scrollbar max-w-full" role="group" aria-label="Time Horizon Filters">
                 {(["7d", "30d", "90d", "ytd", "all"] as const).map((p) => (
                   <button
                     key={p}
@@ -855,7 +860,7 @@ export default function Home() {
                       setCurrentPeriod(p);
                       showToast(`Horizon updated to ${p.toUpperCase()}`);
                     }}
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all focus-ring cursor-pointer ${
+                    className={`px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all focus-ring cursor-pointer shrink-0 ${
                       currentPeriod === p ? "bg-klarna-ink text-white" : "text-klarna-muted hover:text-klarna-ink"
                     }`}
                   >
@@ -867,13 +872,13 @@ export default function Home() {
           </div>
 
           {/* ================= 4 KPI CARDS ================= */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {/* Card 1: Primary Spotlight */}
-            <div className="lg:col-span-4 p-8 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
+            <div className="p-6 sm:p-7 rounded-[20px] sm:rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold uppercase tracking-wider text-klarna-subdued">
-                    Net Capital Flow ({currentPeriod.toUpperCase()})
+                    Net Flow ({currentPeriod.toUpperCase()})
                   </span>
                   <span className="w-8 h-8 rounded-full bg-klarna-surface-2 text-klarna-ink flex items-center justify-center">
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -882,21 +887,21 @@ export default function Home() {
                     </svg>
                   </span>
                 </div>
-                <div className={`klarna-display text-4xl sm:text-5xl font-black mb-2 ${stats.totalSum >= 0 ? "text-klarna-success" : "text-klarna-error"}`}>
+                <div className={`klarna-display text-3xl sm:text-4xl font-black mb-2 ${stats.totalSum >= 0 ? "text-klarna-success" : "text-klarna-error"}`}>
                   {stats.totalSum >= 0 ? "+" : ""}${stats.totalSum.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}M
                 </div>
-                <p className="text-xs text-klarna-muted">Total institutional capital entering spot trusts</p>
+                <p className="text-xs text-klarna-muted">Total capital entering spot trusts</p>
               </div>
-              <div className="pt-5 border-t border-klarna-border flex items-center justify-between text-xs mt-6">
+              <div className="pt-4 border-t border-klarna-border flex items-center justify-between text-xs mt-4">
                 <span className={`font-bold flex items-center gap-1 font-finance ${stats.delta >= 0 ? "text-klarna-success" : "text-klarna-error"}`}>
                   {stats.delta >= 0 ? "+" : ""}${Math.abs(stats.delta).toFixed(1)}M ({stats.delta >= 0 ? "+" : ""}{stats.deltaPct}%)
                 </span>
-                <span className="text-klarna-subdued font-medium">vs prior window</span>
+                <span className="text-klarna-subdued font-medium">vs prior</span>
               </div>
             </div>
 
             {/* Card 2: Latest Session */}
-            <div className="lg:col-span-3 p-7 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
+            <div className="p-6 sm:p-7 rounded-[20px] sm:rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Latest ({stats.latest.label})</span>
@@ -910,14 +915,14 @@ export default function Home() {
                   {stats.latest.total >= 0 ? "+" : ""}${stats.latest.total.toFixed(1)}M
                 </div>
               </div>
-              <div className="pt-4 border-t border-klarna-border flex items-center justify-between text-xs text-klarna-muted">
-                <span className="text-klarna-success font-bold">{stats.inflowCount} Funds Inflow</span>
+              <div className="pt-4 border-t border-klarna-border flex items-center justify-between text-xs text-klarna-muted mt-4">
+                <span className="text-klarna-success font-bold">{stats.inflowCount} Inflow</span>
                 <span className="text-klarna-error font-bold">{stats.outflowCount} Outflow</span>
               </div>
             </div>
 
             {/* Card 3: Dominant Fund (IBIT) */}
-            <div className="lg:col-span-3 p-7 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
+            <div className="p-6 sm:p-7 rounded-[20px] sm:rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Dominant Fund</span>
@@ -927,7 +932,7 @@ export default function Home() {
                   {stats.ibitSum >= 0 ? "+" : ""}${Math.abs(stats.ibitSum) >= 1000 ? (stats.ibitSum / 1000).toFixed(2) + "B" : stats.ibitSum.toFixed(1) + "M"}
                 </div>
               </div>
-              <div className="pt-4 border-t border-klarna-border space-y-1.5">
+              <div className="pt-4 border-t border-klarna-border space-y-1.5 mt-4">
                 <div className="flex justify-between text-xs text-klarna-muted font-medium">
                   <span>BlackRock Share</span>
                   <span className="text-klarna-ink font-mono font-bold">{stats.ibitShare}%</span>
@@ -939,7 +944,7 @@ export default function Home() {
             </div>
 
             {/* Card 4: Cumulative All-Time */}
-            <div className="lg:col-span-2 p-7 rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
+            <div className="p-6 sm:p-7 rounded-[20px] sm:rounded-[24px] bg-klarna-canvas border border-klarna-border shadow-card hover:shadow-elevated transition-all flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Total Net</span>
@@ -951,38 +956,41 @@ export default function Home() {
                     </svg>
                   </span>
                 </div>
-                <div className="klarna-display text-2xl sm:text-3xl text-klarna-ink font-bold mb-1 font-finance">
+                <div className="klarna-display text-3xl sm:text-4xl text-klarna-ink font-bold mb-2 font-finance">
                   +$21.14B
                 </div>
+                <p className="text-xs text-klarna-muted">All-time net ETF inflow</p>
               </div>
-              <div className="pt-4 border-t border-klarna-border text-xs text-klarna-muted">
-                <span className="text-klarna-subdued">Reserves:</span>
-                <div className="text-klarna-ink font-mono font-bold mt-0.5">~341,200 BTC</div>
+              <div className="pt-4 border-t border-klarna-border flex items-center justify-between text-xs text-klarna-muted mt-4">
+                <span className="text-klarna-subdued font-medium">Reserves:</span>
+                <span className="text-klarna-ink font-mono font-bold">~341,200 BTC</span>
               </div>
             </div>
           </div>
         </section>
 
         {/* ================= FLOW DYNAMICS CHART ================= */}
-        <section id="chart-section" className="p-6 sm:p-10 rounded-[28px] bg-klarna-canvas border border-klarna-border shadow-card space-y-8">
+        <section id="chart-section" className="w-full min-w-0 overflow-hidden p-5 sm:p-8 lg:p-10 rounded-[24px] sm:rounded-[28px] bg-klarna-canvas border border-klarna-border shadow-card space-y-6 sm:space-y-8">
           {/* Header & Mode Tabs */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-klarna-border pb-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6 border-b border-klarna-border pb-6">
             <div>
-              <h2 className="klarna-heading text-2xl sm:text-3xl text-klarna-ink flex items-center gap-3">
-                <span>Institutional Flow Dynamics</span>
-                <span className="text-xs px-3 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink font-semibold">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <h2 className="klarna-heading text-2xl sm:text-3xl text-klarna-ink">
+                  Institutional Flow Dynamics
+                </h2>
+                <span className="text-[11px] sm:text-xs px-2.5 sm:px-3 py-1 rounded-full bg-klarna-surface-2 text-klarna-ink font-semibold">
                   {currentChartMode === "daily" && "Daily Net Flow ($M)"}
                   {currentChartMode === "cumulative" && "Cumulative Trajectory"}
                   {currentChartMode === "breakdown" && "Fund Breakdown"}
                 </span>
-              </h2>
-              <p className="text-sm text-klarna-muted mt-1">
+              </div>
+              <p className="text-xs sm:text-sm text-klarna-muted mt-1.5">
                 Tracking daily capital entries against institutional liquidations across US Spot Bitcoin ETFs.
               </p>
             </div>
 
             {/* Chart Mode Tabs */}
-            <div className="inline-flex p-1 rounded-full bg-klarna-surface-2 border border-klarna-border self-start md:self-auto" role="tablist">
+            <div className="inline-flex p-1 rounded-full bg-klarna-surface-2 border border-klarna-border self-start md:self-auto overflow-x-auto no-scrollbar max-w-full" role="tablist">
               {(
                 [
                   { id: "daily", label: "Daily Net Flow" },
@@ -994,7 +1002,7 @@ export default function Home() {
                   key={tab.id}
                   type="button"
                   onClick={() => setCurrentChartMode(tab.id)}
-                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all focus-ring cursor-pointer ${
+                  className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold transition-all focus-ring cursor-pointer shrink-0 ${
                     currentChartMode === tab.id ? "bg-klarna-ink text-white" : "text-klarna-muted hover:text-klarna-ink"
                   }`}
                   role="tab"
@@ -1007,49 +1015,49 @@ export default function Home() {
           </div>
 
           {/* Metric Strip */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 py-1">
-            <div className="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Peak Day Inflow</span>
-              <p className="font-finance text-2xl font-black text-klarna-success mt-1">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 py-1">
+            <div className="p-4 sm:p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Peak Day Inflow</span>
+              <p className="font-finance text-lg sm:text-2xl font-black text-klarna-success mt-1">
                 +${stats.peakInflow.toFixed(1)}M
               </p>
-              <span className="text-xs text-klarna-muted">{stats.peakInflowDate}</span>
+              <span className="text-[11px] sm:text-xs text-klarna-muted block mt-0.5">{stats.peakInflowDate}</span>
             </div>
-            <div className="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Peak Day Outflow</span>
-              <p className="font-finance text-2xl font-black text-klarna-error mt-1">
+            <div className="p-4 sm:p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Peak Day Outflow</span>
+              <p className="font-finance text-lg sm:text-2xl font-black text-klarna-error mt-1">
                 {stats.peakOutflow.toFixed(1)}M
               </p>
-              <span className="text-xs text-klarna-muted">{stats.peakOutflowDate}</span>
+              <span className="text-[11px] sm:text-xs text-klarna-muted block mt-0.5">{stats.peakOutflowDate}</span>
             </div>
-            <div className="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Positive Session Rate</span>
-              <p className="font-finance text-2xl font-black text-klarna-ink mt-1">{stats.posRate}%</p>
-              <span className="text-xs text-klarna-success font-semibold">{stats.positiveCount} of {stats.totalDays} days positive</span>
+            <div className="p-4 sm:p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Positive Rate</span>
+              <p className="font-finance text-lg sm:text-2xl font-black text-klarna-ink mt-1">{stats.posRate}%</p>
+              <span className="text-[11px] sm:text-xs text-klarna-success font-semibold block mt-0.5">{stats.positiveCount} of {stats.totalDays} days</span>
             </div>
-            <div className="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Average Daily Flow</span>
-              <p className="font-finance text-2xl font-black text-klarna-ink mt-1">
+            <div className="p-4 sm:p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-klarna-subdued">Average Daily</span>
+              <p className="font-finance text-lg sm:text-2xl font-black text-klarna-ink mt-1">
                 {stats.totalSum >= 0 ? "+" : ""}${stats.avgDaily}M
               </p>
-              <span className="text-xs text-klarna-muted">Sustained net absorption</span>
+              <span className="text-[11px] sm:text-xs text-klarna-muted block mt-0.5">Sustained net flow</span>
             </div>
           </div>
 
           {/* Chart Canvas */}
-          <div className="relative w-full h-[380px] sm:h-[460px] pt-4">
+          <div className="relative w-full max-w-full overflow-hidden h-[300px] sm:h-[440px] pt-2 sm:pt-4">
             <canvas ref={chartCanvasRef} aria-label="Bitcoin ETF Net Flows Chart" role="img" />
           </div>
 
           {/* Chart Legend & Toggles */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-klarna-border text-xs text-klarna-muted">
-            <div className="flex items-center gap-5 flex-wrap">
-              <div className="flex items-center gap-2">
-                <span className="w-3.5 h-3.5 rounded-full bg-klarna-ink inline-block"></span>
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 pt-4 border-t border-klarna-border text-xs text-klarna-muted">
+            <div className="flex items-center gap-3 sm:gap-5 flex-wrap">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-klarna-ink inline-block"></span>
                 <span className="text-klarna-ink font-semibold">Net Inflow (+$)</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3.5 h-3.5 rounded-full bg-klarna-error inline-block"></span>
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-klarna-error inline-block"></span>
                 <span className="text-klarna-ink font-semibold">Net Outflow (-$)</span>
               </div>
               <button
@@ -1063,33 +1071,33 @@ export default function Home() {
               >
                 <span className="w-3.5 h-1.5 bg-klarna-pink-pressed inline-block rounded-full"></span>
                 <span className={showMovingAverage ? "text-klarna-ink font-bold" : "text-klarna-subdued font-medium line-through"}>
-                  7-Day Moving Average ({showMovingAverage ? "Active" : "Hidden"})
+                  7D MA ({showMovingAverage ? "Active" : "Hidden"})
                 </span>
               </button>
             </div>
 
-            <div className="flex items-center gap-2 text-klarna-subdued">
-              <svg className="w-4 h-4 text-klarna-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex items-center gap-1.5 text-klarna-subdued text-[11px] sm:text-xs">
+              <svg className="w-3.5 h-3.5 text-klarna-ink shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="12" y1="16" x2="12" y2="12" />
                 <line x1="12" y1="8" x2="12.01" y2="8" />
               </svg>
-              <span>Hover chart bars to inspect individual issuer volumes</span>
+              <span>Tap bars to inspect fund volumes</span>
             </div>
           </div>
         </section>
 
         {/* ================= ISSUERS DIRECTORY ================= */}
-        <section id="issuers" className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <section id="issuers" className="w-full min-w-0 space-y-6 sm:space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Market Participants</span>
-              <h2 className="klarna-heading text-3xl sm:text-4xl text-klarna-ink mt-1">
+              <h2 className="klarna-heading text-2xl sm:text-4xl text-klarna-ink mt-1">
                 Spot Bitcoin ETF Issuers
               </h2>
             </div>
-            <div className="flex items-center gap-3">
-              <label htmlFor="issuerSortSelect" className="text-xs font-semibold text-klarna-muted">
+            <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
+              <label htmlFor="issuerSortSelect" className="text-xs font-semibold text-klarna-muted shrink-0">
                 Sort by:
               </label>
               <select
@@ -1100,7 +1108,7 @@ export default function Home() {
                   setIssuerSort(val);
                   showToast(`Issuers sorted by ${val}`);
                 }}
-                className="px-4 py-2 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink font-semibold focus-ring cursor-pointer shadow-card"
+                className="w-full sm:w-auto px-4 py-2 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink font-semibold focus-ring cursor-pointer shadow-card"
               >
                 <option value="inflow">Total Inflow (High to Low)</option>
                 <option value="fee">Expense Ratio (Low to High)</option>
@@ -1109,7 +1117,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {sortedIssuers.map((issuer) => {
               const formattedInflow =
                 Math.abs(issuer.totalInflow) >= 1000
@@ -1119,7 +1127,7 @@ export default function Home() {
               return (
                 <div
                   key={issuer.ticker}
-                  className={`p-6 rounded-[24px] bg-klarna-canvas shadow-card hover:shadow-elevated transition-all flex flex-col justify-between relative ${
+                  className={`p-5 sm:p-6 rounded-[20px] sm:rounded-[24px] bg-klarna-canvas shadow-card hover:shadow-elevated transition-all flex flex-col justify-between relative ${
                     issuer.isLeader ? "border-2 border-klarna-pink" : "border border-klarna-border"
                   }`}
                 >
@@ -1137,13 +1145,13 @@ export default function Home() {
                         Fee: {issuer.fee.toFixed(2)}%
                       </span>
                     </div>
-                    <h3 className="font-title font-bold text-lg text-klarna-ink">{issuer.name}</h3>
+                    <h3 className="font-title font-bold text-base sm:text-lg text-klarna-ink">{issuer.name}</h3>
                     <p className="text-xs text-klarna-muted mt-0.5">{issuer.manager}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-klarna-border space-y-2">
+                  <div className="mt-5 sm:mt-6 pt-4 border-t border-klarna-border space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] uppercase font-bold text-klarna-subdued">Latest Session</span>
-                      <span className={`font-finance font-bold text-base ${issuer.latestSession >= 0 ? "text-klarna-success" : "text-klarna-error"}`}>
+                      <span className={`font-finance font-bold text-sm sm:text-base ${issuer.latestSession >= 0 ? "text-klarna-success" : "text-klarna-error"}`}>
                         {issuer.latestSession >= 0 ? "+" : ""}${issuer.latestSession.toFixed(1)}M
                       </span>
                     </div>
@@ -1151,7 +1159,7 @@ export default function Home() {
                       <span className="text-[11px] uppercase font-bold text-klarna-subdued">
                         {issuer.isNegative ? "Net Conversions" : "Total Inflows"}
                       </span>
-                      <span className={`font-finance font-bold text-base ${issuer.totalInflow >= 0 ? "text-klarna-ink" : "text-klarna-error"}`}>
+                      <span className={`font-finance font-bold text-sm sm:text-base ${issuer.totalInflow >= 0 ? "text-klarna-ink" : "text-klarna-error"}`}>
                         {issuer.totalInflow >= 0 ? "+" : ""}${formattedInflow}
                       </span>
                     </div>
@@ -1163,14 +1171,14 @@ export default function Home() {
         </section>
 
         {/* ================= HISTORICAL DATA LEDGER ================= */}
-        <section id="historical-data" className="space-y-6">
+        <section id="historical-data" className="w-full min-w-0 space-y-4 sm:space-y-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Granular Records</span>
-              <h2 className="klarna-heading text-3xl sm:text-4xl text-klarna-ink mt-1">
+              <h2 className="klarna-heading text-2xl sm:text-4xl text-klarna-ink mt-1">
                 Historical ETF Flow Ledger
               </h2>
-              <p className="text-sm text-klarna-muted mt-1">
+              <p className="text-xs sm:text-sm text-klarna-muted mt-1">
                 Data sourced from{" "}
                 <a
                   href="https://farside.co.uk/btc/"
@@ -1184,9 +1192,9 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Search and Filters */}
-            <div className="flex items-center gap-3">
-              <div className="relative">
+            {/* Search and Filters - Full width on mobile */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+              <div className="relative w-full sm:w-64">
                 <svg
                   className="w-4 h-4 text-klarna-subdued absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                   viewBox="0 0 24 24"
@@ -1205,14 +1213,14 @@ export default function Home() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   aria-label="Filter records by date"
-                  className="w-48 sm:w-64 pl-10 pr-4 py-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink placeholder-klarna-subdued focus-ring transition-all shadow-card"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink placeholder-klarna-subdued focus-ring transition-all shadow-card"
                 />
               </div>
               <select
                 value={dirFilter}
                 onChange={(e) => setDirFilter(e.target.value as any)}
                 aria-label="Filter records by flow direction"
-                className="px-4 py-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink font-semibold focus-ring cursor-pointer shadow-card"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink font-semibold focus-ring cursor-pointer shadow-card"
               >
                 <option value="all">All Sessions</option>
                 <option value="inflow">Inflows Only (+$)</option>
@@ -1221,20 +1229,29 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Mobile swipe hint banner */}
+          <div className="sm:hidden flex items-center justify-between px-3.5 py-2 rounded-xl bg-klarna-surface-2 border border-klarna-border text-[11px] text-klarna-muted font-medium">
+            <span className="flex items-center gap-1.5">
+              <span>👉</span>
+              <span>Geser tabel ke samping untuk detail ETF</span>
+            </span>
+            <span className="font-mono font-bold text-klarna-ink text-[10px]">11 FUNDS</span>
+          </div>
+
           {/* Table Container */}
-          <div className="overflow-x-auto rounded-[24px] border border-klarna-border bg-klarna-canvas shadow-card">
+          <div className="w-full min-w-0 max-w-full overflow-x-auto rounded-[20px] sm:rounded-[24px] border border-klarna-border bg-klarna-canvas shadow-card">
             <table className="w-full text-left text-sm border-collapse" aria-label="Historical daily ETF flows">
               <thead>
                 <tr className="border-b border-klarna-border bg-klarna-surface-2 text-[11px] font-mono uppercase text-klarna-muted tracking-wider">
-                  <th scope="col" className="py-4 px-4 font-bold text-klarna-ink">Date</th>
-                  <th scope="col" className="py-4 px-4 font-bold text-klarna-ink">Total Net Flow</th>
-                  <th scope="col" className="py-4 px-3 font-bold text-klarna-success">IBIT (BlackRock)</th>
-                  <th scope="col" className="py-4 px-3 font-bold text-klarna-ink">FBTC (Fidelity)</th>
-                  <th scope="col" className="py-4 px-3 font-bold text-klarna-ink">BITB (Bitwise)</th>
-                  <th scope="col" className="py-4 px-3 font-bold text-klarna-ink">ARKB (ARK)</th>
-                  <th scope="col" className="py-4 px-3 font-bold text-klarna-error">GBTC (Grayscale)</th>
-                  <th scope="col" className="py-4 px-3 font-bold text-klarna-ink">Others</th>
-                  <th scope="col" className="py-4 px-4 font-bold text-right text-klarna-ink">Session</th>
+                  <th scope="col" className="py-3.5 sm:py-4 px-3 sm:px-4 font-bold text-klarna-ink whitespace-nowrap">Date</th>
+                  <th scope="col" className="py-3.5 sm:py-4 px-3 sm:px-4 font-bold text-klarna-ink whitespace-nowrap">Total Net Flow</th>
+                  <th scope="col" className="py-3.5 sm:py-4 px-3 font-bold text-klarna-success whitespace-nowrap">IBIT (BlackRock)</th>
+                  <th scope="col" className="py-3.5 sm:py-4 px-3 font-bold text-klarna-ink whitespace-nowrap">FBTC (Fidelity)</th>
+                  <th scope="col" className="py-3.5 sm:py-4 px-3 font-bold text-klarna-ink whitespace-nowrap">BITB (Bitwise)</th>
+                  <th scope="col" className="py-3.5 sm:py-4 px-3 font-bold text-klarna-ink whitespace-nowrap">ARKB (ARK)</th>
+                  <th scope="col" className="py-3.5 sm:py-4 px-3 font-bold text-klarna-error whitespace-nowrap">GBTC (Grayscale)</th>
+                  <th scope="col" className="py-3.5 sm:py-4 px-3 font-bold text-klarna-ink whitespace-nowrap">Others</th>
+                  <th scope="col" className="py-3.5 sm:py-4 px-3 sm:px-4 font-bold text-right text-klarna-ink whitespace-nowrap">Session</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-klarna-border font-finance text-xs">
@@ -1268,31 +1285,31 @@ export default function Home() {
                     const isPos = r.total >= 0;
                     return (
                       <tr key={r.date} className="hover:bg-klarna-surface-1 transition-colors">
-                        <td className="py-4 px-4 font-bold text-klarna-ink whitespace-nowrap">{r.label}, 2026</td>
-                        <td className={`py-4 px-4 font-bold text-sm ${isPos ? "text-klarna-success" : "text-klarna-error"}`}>
+                        <td className="py-3.5 sm:py-4 px-3 sm:px-4 font-bold text-klarna-ink whitespace-nowrap">{r.label}, 2026</td>
+                        <td className={`py-3.5 sm:py-4 px-3 sm:px-4 font-bold text-xs sm:text-sm whitespace-nowrap ${isPos ? "text-klarna-success" : "text-klarna-error"}`}>
                           {isPos ? "+" : ""}${r.total.toFixed(1)}M
                         </td>
-                        <td className="py-4 px-3 text-klarna-success font-medium">
+                        <td className="py-3.5 sm:py-4 px-3 text-klarna-success font-medium whitespace-nowrap">
                           {r.ibit >= 0 ? "+" : ""}${r.ibit.toFixed(1)}M
                         </td>
-                        <td className={`py-4 px-3 ${r.fbtc >= 0 ? "text-klarna-ink" : "text-klarna-error"}`}>
+                        <td className={`py-3.5 sm:py-4 px-3 whitespace-nowrap ${r.fbtc >= 0 ? "text-klarna-ink" : "text-klarna-error"}`}>
                           {r.fbtc >= 0 ? "+" : ""}${r.fbtc.toFixed(1)}M
                         </td>
-                        <td className={`py-4 px-3 ${r.bitb >= 0 ? "text-klarna-ink" : "text-klarna-error"}`}>
+                        <td className={`py-3.5 sm:py-4 px-3 whitespace-nowrap ${r.bitb >= 0 ? "text-klarna-ink" : "text-klarna-error"}`}>
                           {r.bitb >= 0 ? "+" : ""}${r.bitb.toFixed(1)}M
                         </td>
-                        <td className={`py-4 px-3 ${r.arkb >= 0 ? "text-klarna-ink" : "text-klarna-error"}`}>
+                        <td className={`py-3.5 sm:py-4 px-3 whitespace-nowrap ${r.arkb >= 0 ? "text-klarna-ink" : "text-klarna-error"}`}>
                           {r.arkb >= 0 ? "+" : ""}${r.arkb.toFixed(1)}M
                         </td>
-                        <td className="py-4 px-3 font-semibold text-klarna-error">
+                        <td className="py-3.5 sm:py-4 px-3 font-semibold text-klarna-error whitespace-nowrap">
                           {r.gbtc >= 0 ? "+" : ""}${r.gbtc.toFixed(1)}M
                         </td>
-                        <td className="py-4 px-3 text-klarna-muted">
+                        <td className="py-3.5 sm:py-4 px-3 text-klarna-muted whitespace-nowrap">
                           {r.others >= 0 ? "+" : ""}${r.others.toFixed(1)}M
                         </td>
-                        <td className="py-4 px-4 text-right">
+                        <td className="py-3.5 sm:py-4 px-3 sm:px-4 text-right whitespace-nowrap">
                           <span
-                            className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold ${
+                            className={`inline-block px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] font-bold ${
                               isPos ? "bg-emerald-50 text-klarna-success border border-emerald-200/60" : "bg-red-50 text-klarna-error border border-red-200/60"
                             }`}
                           >
@@ -1338,8 +1355,8 @@ export default function Home() {
         </section>
 
         {/* ================= FASE 2: INDICATOR LAB ================= */}
-        <section id="scripting-studio" className="p-8 sm:p-10 rounded-[28px] bg-klarna-canvas border border-klarna-border shadow-card space-y-8">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-klarna-border">
+        <section id="scripting-studio" className="w-full min-w-0 overflow-hidden p-5 sm:p-8 lg:p-10 rounded-[24px] sm:rounded-[28px] bg-klarna-canvas border border-klarna-border shadow-card space-y-6 sm:space-y-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6 pb-6 border-b border-klarna-border">
             <div>
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-klarna-pink font-bold text-klarna-ink text-xs">
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1351,7 +1368,7 @@ export default function Home() {
               <h2 className="klarna-heading text-2xl sm:text-3xl text-klarna-ink mt-2">
                 Custom Flow Indicator Studio
               </h2>
-              <p className="text-sm text-klarna-muted mt-1">
+              <p className="text-xs sm:text-sm text-klarna-muted mt-1">
                 Execute sandboxed algorithmic indicators over raw ETF flow series.
               </p>
             </div>
@@ -1373,7 +1390,7 @@ export default function Home() {
                     setSelectedScript(preset.key);
                     showToast(`Loaded ${scriptPresets[preset.key].metric} formula`);
                   }}
-                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all focus-ring cursor-pointer ${
+                  className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold transition-all focus-ring cursor-pointer shrink-0 ${
                     selectedScript === preset.key ? "bg-klarna-ink text-white" : "bg-klarna-surface-2 text-klarna-muted hover:text-klarna-ink"
                   }`}
                 >
@@ -1386,24 +1403,24 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Editor Preview */}
             <div className="lg:col-span-7 rounded-2xl bg-klarna-surface-2 border border-klarna-border overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-3 bg-white border-b border-klarna-border text-xs font-mono text-klarna-muted">
+              <div className="flex items-center justify-between px-4 sm:px-5 py-3 bg-white border-b border-klarna-border text-xs font-mono text-klarna-muted">
                 <span className="flex items-center gap-2 font-bold text-klarna-ink">
                   <span className="w-2.5 h-2.5 rounded-full bg-klarna-pink"></span>
-                  <span>{scriptPresets[selectedScript].file}</span>
+                  <span className="truncate max-w-[200px] sm:max-w-none">{scriptPresets[selectedScript].file}</span>
                 </span>
-                <span className="text-[10px] uppercase font-bold text-klarna-success">Sandboxed Runtime</span>
+                <span className="text-[10px] uppercase font-bold text-klarna-success shrink-0">Sandboxed Runtime</span>
               </div>
-              <pre className="p-5 text-xs font-mono text-klarna-ink overflow-x-auto leading-relaxed">
+              <pre className="p-4 sm:p-5 text-xs font-mono text-klarna-ink overflow-x-auto leading-relaxed max-h-[320px] sm:max-h-none">
                 <code>{scriptPresets[selectedScript].code}</code>
               </pre>
             </div>
 
             {/* Output Card */}
-            <div className="lg:col-span-5 flex flex-col justify-between p-6 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+            <div className="lg:col-span-5 flex flex-col justify-between p-5 sm:p-6 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Computed Analysis Output</span>
                 <div
-                  className={`mt-4 p-6 rounded-2xl bg-klarna-canvas border border-klarna-pink shadow-card space-y-4 transition-opacity duration-300 ${
+                  className={`mt-4 p-5 sm:p-6 rounded-2xl bg-klarna-canvas border border-klarna-pink shadow-card space-y-4 transition-opacity duration-300 ${
                     isSimulating ? "opacity-35" : "opacity-100"
                   }`}
                 >
@@ -1413,7 +1430,7 @@ export default function Home() {
                   </div>
                   <div className="flex justify-between items-baseline">
                     <span className="text-xs font-semibold text-klarna-muted">Current Value</span>
-                    <span className="klarna-display text-3xl font-black text-klarna-success font-finance">
+                    <span className="klarna-display text-2xl sm:text-3xl font-black text-klarna-success font-finance">
                       {scriptPresets[selectedScript].value}
                     </span>
                   </div>
@@ -1426,7 +1443,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-5 sm:mt-6">
                 <button
                   type="button"
                   onClick={handleRunSimulation}
@@ -1443,35 +1460,35 @@ export default function Home() {
         </section>
 
         {/* ================= PIPELINE SPEC ================= */}
-        <section className="p-8 sm:p-10 rounded-[28px] bg-klarna-canvas border border-klarna-border shadow-card space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-klarna-border pb-4">
+        <section className="w-full min-w-0 p-5 sm:p-8 lg:p-10 rounded-[24px] sm:rounded-[28px] bg-klarna-canvas border border-klarna-border shadow-card space-y-5 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-klarna-border pb-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-klarna-subdued">Data Pipeline Specification</span>
-              <h3 className="klarna-heading text-2xl text-klarna-ink mt-1">Full-Stack Scraper Architecture</h3>
+              <h3 className="klarna-heading text-xl sm:text-2xl text-klarna-ink mt-1">Full-Stack Scraper Architecture</h3>
             </div>
             <div className="flex items-center gap-2 text-xs font-mono font-bold text-klarna-muted">
               <span>Cron Scheduler: Active</span>
             </div>
           </div>
 
-          <p className="text-sm text-klarna-muted leading-relaxed max-w-3xl">
+          <p className="text-xs sm:text-sm text-klarna-muted leading-relaxed max-w-3xl">
             Designed by <strong className="text-klarna-ink">Umam</strong> as a personal portfolio project demonstrating resilient web scraping pipelines, database upsert idempotency, and responsive financial data visualization adhering to the Klarna brand guidelines.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            <div className="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-2">
+            <div className="p-4 sm:p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
               <span className="text-[10px] font-mono font-bold uppercase text-klarna-subdued block">PARSER ENGINE</span>
-              <span className="text-base font-bold text-klarna-ink mt-1 block">Camoufox (Stealth C++)</span>
+              <span className="text-sm sm:text-base font-bold text-klarna-ink mt-1 block">Camoufox (Stealth C++)</span>
               <span className="text-xs text-klarna-muted mt-0.5 block">Bypasses Cloudflare & extracts tables cleanly</span>
             </div>
-            <div className="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+            <div className="p-4 sm:p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
               <span className="text-[10px] font-mono font-bold uppercase text-klarna-subdued block">SCHEDULING</span>
-              <span className="text-base font-bold text-klarna-ink mt-1 block">4-Hour Intervals</span>
+              <span className="text-sm sm:text-base font-bold text-klarna-ink mt-1 block">4-Hour Intervals</span>
               <span className="text-xs text-klarna-muted mt-0.5 block">Syncs when farside.co.uk publishes</span>
             </div>
-            <div className="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
+            <div className="p-4 sm:p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
               <span className="text-[10px] font-mono font-bold uppercase text-klarna-subdued block">DATA INTEGRITY</span>
-              <span className="text-base font-bold text-klarna-ink mt-1 block">PostgreSQL Idempotency</span>
+              <span className="text-sm sm:text-base font-bold text-klarna-ink mt-1 block">PostgreSQL Idempotency</span>
               <span className="text-xs text-klarna-muted mt-0.5 block">Compound (date, ticker) unique key</span>
             </div>
           </div>
@@ -1479,8 +1496,8 @@ export default function Home() {
       </main>
 
       {/* ================= FOOTER ================= */}
-      <footer className="border-t border-klarna-border mt-24 py-12 bg-klarna-canvas">
-        <div className="max-w-[1240px] mx-auto px-4 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <footer className="border-t border-klarna-border mt-16 sm:mt-24 py-8 sm:py-12 bg-klarna-canvas">
+        <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-klarna-pink flex items-center justify-center font-title font-black text-klarna-ink text-sm">
               ₿
@@ -1508,8 +1525,8 @@ export default function Home() {
 
       {/* ================= TOAST SYSTEM ================= */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-[9999] pointer-events-none">
-          <div className="klarna-toast">
+        <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-[9999] pointer-events-none flex justify-center sm:justify-end">
+          <div className="klarna-toast max-w-sm">
             <span className="text-klarna-pink font-bold">●</span>
             <span>{toastMessage}</span>
           </div>
