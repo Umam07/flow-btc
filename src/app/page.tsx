@@ -27,7 +27,7 @@ interface Issuer {
   isNegative?: boolean;
 }
 
-const rawFlowData: FlowRecord[] = [
+const defaultRawFlowData: FlowRecord[] = [
   { date: "2026-09-04", label: "Sep 04", total: 312.4, ibit: 210.5, fbtc: 84.1, bitb: 14.2, arkb: 28.4, gbtc: -34.2, others: 9.4 },
   { date: "2026-09-03", label: "Sep 03", total: 184.8, ibit: 122.0, fbtc: 51.2, bitb: 9.5, arkb: 12.1, gbtc: -18.0, others: 8.0 },
   { date: "2026-09-02", label: "Sep 02", total: -48.2, ibit: 15.2, fbtc: 0.0, bitb: -2.1, arkb: -6.3, gbtc: -62.4, others: 7.4 },
@@ -60,7 +60,7 @@ const rawFlowData: FlowRecord[] = [
   { date: "2026-08-05", label: "Aug 05", total: 275.0, ibit: 180.0, fbtc: 65.0, bitb: 15.0, arkb: 22.0, gbtc: -21.0, others: 14.0 },
 ];
 
-const issuersData: Issuer[] = [
+const defaultIssuersData: Issuer[] = [
   { ticker: "IBIT", name: "iShares Bitcoin Trust", manager: "BlackRock Asset Management", fee: 0.25, totalInflow: 24810, latestSession: 210.5, highlight: "Market Leader (58%)", isLeader: true },
   { ticker: "FBTC", name: "Wise Origin Bitcoin", manager: "Fidelity Investments", fee: 0.25, totalInflow: 11450, latestSession: 84.1 },
   { ticker: "ARKB", name: "ARK 21Shares Bitcoin", manager: "ARK Invest & 21Shares", fee: 0.21, totalInflow: 2840, latestSession: 28.4 },
@@ -70,6 +70,126 @@ const issuersData: Issuer[] = [
   { ticker: "HODL", name: "VanEck Bitcoin Trust", manager: "VanEck Associates", fee: 0.20, totalInflow: 785.2, latestSession: 4.8 },
   { ticker: "OTHERS", name: "BTCO, EZBC, BRRR...", manager: "Invesco, Franklin, Valkyrie", fee: 0.25, totalInflow: 1210, latestSession: 7.1 },
 ];
+
+interface ScrapedFlowJson {
+  metadata: {
+    source_url: string;
+    scraped_at: string;
+    total_days: number;
+    date_range: { start: string; end: string };
+    tickers: string[];
+    funds: Record<string, { name: string; issuer: string }>;
+  };
+  fees: Record<string, string>;
+  summary: {
+    total?: Record<string, number>;
+    average?: Record<string, number>;
+    maximum?: Record<string, number>;
+    minimum?: Record<string, number>;
+  };
+  daily_flows: Array<{
+    date: string;
+    raw_date: string;
+    total: number;
+    flows: Record<string, number>;
+  }>;
+}
+
+function parseDateLabel(dateStr: string, rawDate?: string): string {
+  if (rawDate && /^\d{1,2}\s+[A-Za-z]{3}\s+\d{4}$/.test(rawDate.trim())) {
+    const parts = rawDate.trim().split(/\s+/);
+    return `${parts[1]} ${parts[0].padStart(2, "0")}`;
+  }
+  const parts = dateStr.split("-");
+  if (parts.length === 3) {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const m = parseInt(parts[1], 10);
+    return `${months[m - 1] || parts[1]} ${parts[2]}`;
+  }
+  return dateStr;
+}
+
+function transformScrapedData(json: ScrapedFlowJson): { convertedFlows: FlowRecord[]; computedIssuers: Issuer[] } {
+  if (!json?.daily_flows || !Array.isArray(json.daily_flows)) {
+    return { convertedFlows: [], computedIssuers: [] };
+  }
+
+  // Daily flows from JSON is oldest to newest.
+  // In the dashboard, flowData is ordered newest-first (flowData[0] = latest session)
+  const convertedFlows: FlowRecord[] = json.daily_flows
+    .slice()
+    .reverse()
+    .map((item) => {
+      const f = item.flows || {};
+      const ibit = f["IBIT"] ?? 0;
+      const fbtc = f["FBTC"] ?? 0;
+      const bitb = f["BITB"] ?? 0;
+      const arkb = f["ARKB"] ?? 0;
+      const gbtc = f["GBTC"] ?? 0;
+
+      const others = Math.round(
+        ((f["BTCO"] ?? 0) +
+          (f["EZBC"] ?? 0) +
+          (f["BRRR"] ?? 0) +
+          (f["HODL"] ?? 0) +
+          (f["BTCW"] ?? 0) +
+          (f["MSBT"] ?? 0) +
+          (f["BTC"] ?? 0)) *
+          10
+      ) / 10;
+
+      return {
+        date: item.date,
+        label: parseDateLabel(item.date, item.raw_date),
+        total: item.total ?? Math.round((ibit + fbtc + bitb + arkb + gbtc + others) * 10) / 10,
+        ibit,
+        fbtc,
+        bitb,
+        arkb,
+        gbtc,
+        others,
+      };
+    });
+
+  const latestSessionFlows = json.daily_flows[json.daily_flows.length - 1]?.flows || {};
+  const totalSummary = json.summary?.total || {};
+
+  const majorTickers = ["IBIT", "FBTC", "ARKB", "BITB", "GBTC", "BTC", "HODL"];
+  const computedIssuers: Issuer[] = majorTickers.map((ticker) => {
+    const fundMeta = json.metadata?.funds?.[ticker] || { name: ticker, issuer: "Asset Manager" };
+    const rawFee = json.fees?.[ticker] || "0.25%";
+    const feeNum = parseFloat(rawFee.replace("%", "")) || 0.25;
+    const totalInflow = totalSummary[ticker] ?? 0;
+    const latest = latestSessionFlows[ticker] ?? 0;
+
+    return {
+      ticker,
+      name: fundMeta.name,
+      manager: fundMeta.issuer,
+      fee: feeNum,
+      totalInflow: Math.round(totalInflow * 10) / 10,
+      latestSession: Math.round(latest * 10) / 10,
+      highlight: ticker === "IBIT" ? "Market Leader (58%)" : undefined,
+      isLeader: ticker === "IBIT",
+      isNegative: totalInflow < 0,
+    };
+  });
+
+  const otherTickers = ["BTCO", "EZBC", "BRRR", "BTCW", "MSBT"];
+  const otherTotalInflow = otherTickers.reduce((acc, t) => acc + (totalSummary[t] ?? 0), 0);
+  const otherLatestSession = otherTickers.reduce((acc, t) => acc + (latestSessionFlows[t] ?? 0), 0);
+  computedIssuers.push({
+    ticker: "OTHERS",
+    name: "BTCO, EZBC, BRRR, MSBT...",
+    manager: "Invesco, Franklin, Valkyrie, etc.",
+    fee: 0.25,
+    totalInflow: Math.round(otherTotalInflow * 10) / 10,
+    latestSession: Math.round(otherLatestSession * 10) / 10,
+    isNegative: otherTotalInflow < 0,
+  });
+
+  return { convertedFlows, computedIssuers };
+}
 
 const scriptPresets = {
   zscore: {
@@ -125,9 +245,13 @@ export default function Home() {
   const [selectedScript, setSelectedScript] = useState<"zscore" | "rotation" | "velocity">("zscore");
   const [isSimulating, setIsSimulating] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
-  const [syncTime, setSyncTime] = useState<string>("14:00 UTC");
+  const [syncTime, setSyncTime] = useState<string>("14:01 UTC");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Dynamic state loaded from scraped JSON
+  const [flowData, setFlowData] = useState<FlowRecord[]>(defaultRawFlowData);
+  const [issuers, setIssuers] = useState<Issuer[]>(defaultIssuersData);
 
   const chartCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
@@ -139,28 +263,95 @@ export default function Home() {
     }, 3200);
   };
 
+  // Initial load of scraped data on mount
+  useEffect(() => {
+    let isMounted = true;
+    const loadInitialData = async () => {
+      try {
+        let res = await fetch(`/data/btc_etf_flows_all.json?t=${Date.now()}`);
+        if (!res.ok) {
+          res = await fetch(`/data/btc_etf_flows.json?t=${Date.now()}`);
+        }
+        if (res.ok && isMounted) {
+          const json: ScrapedFlowJson = await res.json();
+          const { convertedFlows, computedIssuers } = transformScrapedData(json);
+          if (convertedFlows.length > 0) {
+            setFlowData(convertedFlows);
+          }
+          if (computedIssuers.length > 0) {
+            setIssuers(computedIssuers);
+          }
+          if (json.metadata?.scraped_at) {
+            const d = new Date(json.metadata.scraped_at);
+            const h = String(d.getUTCHours()).padStart(2, "0");
+            const m = String(d.getUTCMinutes()).padStart(2, "0");
+            setSyncTime(`${h}:${m} UTC`);
+          }
+        }
+      } catch (err) {
+        console.warn("Could not load initial scraped data, using default fallback:", err);
+      }
+    };
+
+    loadInitialData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Filtered dataset for statistics and chart based on period
   const filteredData = useMemo(() => {
-    const count = currentPeriod === "7d" ? 7 : 30;
-    return rawFlowData.slice(0, count).reverse();
-  }, [currentPeriod]);
+    let count: number;
+    switch (currentPeriod) {
+      case "7d":
+        count = 7;
+        break;
+      case "30d":
+        count = 30;
+        break;
+      case "90d":
+        count = 90;
+        break;
+      case "ytd": {
+        const latestYear = flowData[0]?.date?.slice(0, 4) || "2026";
+        const ytdRecords = flowData.filter((d) => d.date.startsWith(latestYear));
+        count = Math.max(7, ytdRecords.length);
+        break;
+      }
+      case "all":
+      default:
+        count = flowData.length;
+        break;
+    }
+    return flowData.slice(0, count).reverse();
+  }, [flowData, currentPeriod]);
 
   // Financial calculations
   const stats = useMemo(() => {
-    const totalSum = filteredData.reduce((acc, curr) => acc + curr.total, 0);
+    const totalSum = Math.round(filteredData.reduce((acc, curr) => acc + curr.total, 0) * 10) / 10;
     const totalDays = filteredData.length;
 
     // Prior window delta
-    const count = currentPeriod === "7d" ? 7 : 14;
-    const recentSlice = rawFlowData.slice(0, count);
-    const priorSlice = rawFlowData.slice(count, count * 2);
+    const count = currentPeriod === "7d" ? 7 : currentPeriod === "30d" ? 30 : 14;
+    const recentSlice = flowData.slice(0, count);
+    const priorSlice = flowData.slice(count, count * 2);
     const recentSum = recentSlice.reduce((a, b) => a + b.total, 0);
     const priorSum = priorSlice.length > 0 ? priorSlice.reduce((a, b) => a + b.total, 0) : recentSum * 0.9;
-    const delta = recentSum - priorSum;
+    const delta = Math.round((recentSum - priorSum) * 10) / 10;
     const deltaPct = priorSum !== 0 ? ((delta / Math.abs(priorSum)) * 100).toFixed(1) : "0.0";
 
     // Latest session stats
-    const latest = rawFlowData[0];
+    const latest = flowData[0] || {
+      date: "",
+      label: "",
+      total: 0,
+      ibit: 0,
+      fbtc: 0,
+      bitb: 0,
+      arkb: 0,
+      gbtc: 0,
+      others: 0,
+    };
     const issuersInSession = [latest.ibit, latest.fbtc, latest.bitb, latest.arkb, latest.gbtc, latest.others];
     const inflowCount = issuersInSession.filter((v) => v > 0).length;
     const outflowCount = issuersInSession.filter((v) => v < 0).length;
@@ -179,11 +370,11 @@ export default function Home() {
     filteredData.forEach((d) => {
       if (d.total > peakInflow) {
         peakInflow = d.total;
-        peakInflowDate = `${d.label}, 2026`;
+        peakInflowDate = `${d.label}, ${d.date?.slice(0, 4) || ""}`;
       }
       if (d.total < peakOutflow) {
         peakOutflow = d.total;
-        peakOutflowDate = `${d.label}, 2026`;
+        peakOutflowDate = `${d.label}, ${d.date?.slice(0, 4) || ""}`;
       }
       if (d.total >= 0) {
         positiveCount++;
@@ -202,16 +393,16 @@ export default function Home() {
       outflowCount,
       ibitSum,
       ibitShare,
-      peakInflow,
-      peakInflowDate,
-      peakOutflow,
-      peakOutflowDate,
+      peakInflow: peakInflow === -Infinity ? 0 : peakInflow,
+      peakInflowDate: peakInflowDate || "-",
+      peakOutflow: peakOutflow === Infinity ? 0 : peakOutflow,
+      peakOutflowDate: peakOutflowDate || "-",
       positiveCount,
       totalDays,
       posRate,
       avgDaily,
     };
-  }, [filteredData, currentPeriod]);
+  }, [flowData, filteredData, currentPeriod]);
 
   // Chart rendering with Chart.js
   useEffect(() => {
@@ -313,10 +504,10 @@ export default function Home() {
         options: commonOptions,
       });
     } else if (currentChartMode === "cumulative") {
-      let runningTotal = 17500;
+      let runningTotal = 0;
       const cumulativeData = filteredData.map((d) => {
         runningTotal += d.total;
-        return runningTotal;
+        return Math.round(runningTotal * 10) / 10;
       });
 
       const gradient = ctx.createLinearGradient(0, 0, 0, 420);
@@ -347,35 +538,32 @@ export default function Home() {
         options: commonOptions,
       });
     } else if (currentChartMode === "breakdown") {
+      const ibitData = filteredData.map((d) => d.ibit);
+      const fbtcData = filteredData.map((d) => d.fbtc);
+      const bitbData = filteredData.map((d) => d.bitb);
+      const arkbData = filteredData.map((d) => d.arkb);
+      const gbtcData = filteredData.map((d) => d.gbtc);
+      const othersData = filteredData.map((d) => d.others);
+
       chartInstanceRef.current = new Chart(ctx, {
         type: "bar",
         data: {
           labels,
           datasets: [
-            { label: "IBIT (BlackRock)", data: filteredData.map((d) => d.ibit), backgroundColor: "#0E0E0E", borderRadius: 4 },
-            { label: "FBTC (Fidelity)", data: filteredData.map((d) => d.fbtc), backgroundColor: "#4A4A4A", borderRadius: 4 },
-            { label: "BITB (Bitwise)", data: filteredData.map((d) => d.bitb), backgroundColor: "#767676", borderRadius: 4 },
-            { label: "ARKB (ARK)", data: filteredData.map((d) => d.arkb), backgroundColor: "#FFB3C7", borderRadius: 4 },
-            { label: "GBTC (Grayscale)", data: filteredData.map((d) => d.gbtc), backgroundColor: "#D6332E", borderRadius: 4 },
+            { label: "IBIT", data: ibitData, backgroundColor: "#0E0E0E", stack: "etf" },
+            { label: "FBTC", data: fbtcData, backgroundColor: "#4A4A4A", stack: "etf" },
+            { label: "BITB", data: bitbData, backgroundColor: "#767676", stack: "etf" },
+            { label: "ARKB", data: arkbData, backgroundColor: "#FFB3C7", stack: "etf" },
+            { label: "Others", data: othersData, backgroundColor: "#E3E0DC", stack: "etf" },
+            { label: "GBTC", data: gbtcData, backgroundColor: "#D6332E", stack: "etf" },
           ],
         },
         options: {
           ...commonOptions,
           scales: {
-            x: {
-              stacked: true,
-              grid: { color: "rgba(227, 224, 220, 0.6)" },
-              ticks: { color: "#767676", font: { family: "Plus Jakarta Sans", size: 11 } },
-            },
-            y: {
-              stacked: true,
-              grid: { color: "rgba(227, 224, 220, 0.6)" },
-              ticks: {
-                color: "#767676",
-                font: { family: "Plus Jakarta Sans", size: 11 },
-                callback: (v: any) => (v >= 0 ? "+" : "") + "$" + v + "M",
-              },
-            },
+            ...commonOptions.scales,
+            x: { ...commonOptions.scales.x, stacked: true },
+            y: { ...commonOptions.scales.y, stacked: true },
           },
         },
       });
@@ -391,31 +579,31 @@ export default function Home() {
 
   // Sorted issuers
   const sortedIssuers = useMemo(() => {
-    return [...issuersData].sort((a, b) => {
+    return [...issuers].sort((a, b) => {
       if (issuerSort === "inflow") return b.totalInflow - a.totalInflow;
       if (issuerSort === "fee") return a.fee - b.fee;
       if (issuerSort === "ticker") return a.ticker.localeCompare(b.ticker);
       return 0;
     });
-  }, [issuerSort]);
+  }, [issuers, issuerSort]);
 
   // Filtered table rows
   const tableRows = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
-    return rawFlowData.filter((row) => {
+    return flowData.filter((row) => {
       const matchesSearch = row.label.toLowerCase().includes(q) || row.date.includes(q);
       const matchesDir = dirFilter === "all" ? true : dirFilter === "inflow" ? row.total >= 0 : row.total < 0;
       return matchesSearch && matchesDir;
     });
-  }, [searchQuery, dirFilter]);
+  }, [flowData, searchQuery, dirFilter]);
 
   const displayedRows = useMemo(() => {
-    return showAllRows ? tableRows : tableRows.slice(0, 10);
+    return showAllRows ? tableRows : tableRows.slice(0, 15);
   }, [tableRows, showAllRows]);
 
   // CSV Export handler
   const handleExportCSV = () => {
-    const records = tableRows.length > 0 ? tableRows : rawFlowData;
+    const records = tableRows.length > 0 ? tableRows : flowData;
     let csv = "Date,Session_Label,Total_Net_Flow_USD_M,IBIT_M,FBTC_M,BITB_M,ARKB_M,GBTC_M,Others_M\n";
     records.forEach((r) => {
       csv += `${r.date},${r.label},${r.total},${r.ibit},${r.fbtc},${r.bitb},${r.arkb},${r.gbtc},${r.others}\n`;
@@ -431,20 +619,45 @@ export default function Home() {
     showToast(`Exported ${records.length} sessions to CSV`);
   };
 
-  // Pipeline Sync trigger simulation
-  const handleTriggerSync = () => {
+  // Pipeline Sync trigger with real data refetching
+  const handleTriggerSync = async () => {
     setIsSyncing(true);
-    showToast("Contacting farside.co.uk ingestion pipeline...");
+    showToast("Mengambil data terbaru dari hasil scraping Farside...");
 
-    setTimeout(() => {
-      setIsSyncing(false);
-      const now = new Date();
-      const utcHours = String(now.getUTCHours()).padStart(2, "0");
-      const utcMinutes = String(now.getUTCMinutes()).padStart(2, "0");
-      const timeStr = `${utcHours}:${utcMinutes} UTC`;
+    try {
+      let res = await fetch(`/data/btc_etf_flows_all.json?t=${Date.now()}`);
+      if (!res.ok) {
+        res = await fetch(`/data/btc_etf_flows.json?t=${Date.now()}`);
+      }
+      if (!res.ok) {
+        throw new Error(`HTTP status: ${res.status}`);
+      }
+
+      const json: ScrapedFlowJson = await res.json();
+      const { convertedFlows, computedIssuers } = transformScrapedData(json);
+
+      if (convertedFlows.length > 0) {
+        setFlowData(convertedFlows);
+      }
+      if (computedIssuers.length > 0) {
+        setIssuers(computedIssuers);
+      }
+
+      let timeStr = "Live";
+      if (json.metadata?.scraped_at) {
+        const d = new Date(json.metadata.scraped_at);
+        const h = String(d.getUTCHours()).padStart(2, "0");
+        const m = String(d.getUTCMinutes()).padStart(2, "0");
+        timeStr = `${h}:${m} UTC`;
+      }
       setSyncTime(timeStr);
-      showToast(`Pipeline verified: 30 sessions synced (${timeStr})`);
-    }, 750);
+      showToast(`Data sinkron! ${convertedFlows.length} sesi transaksi ETF dimuat (${timeStr})`);
+    } catch (err) {
+      console.error("Sinkronisasi gagal:", err);
+      showToast("Gagal mengambil data scraping, menggunakan cache lokal.");
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   // Script simulator
@@ -527,6 +740,7 @@ export default function Home() {
                 <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
                 <path d="M16 21h5v-5" />
               </svg>
+              <span className="text-xs font-bold text-klarna-ink">{isSyncing ? "Syncing..." : "Refresh"}</span>
             </button>
 
             {/* Primary CTA: Confident Black Pill Button */}
@@ -1247,8 +1461,8 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div className="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
               <span className="text-[10px] font-mono font-bold uppercase text-klarna-subdued block">PARSER ENGINE</span>
-              <span className="text-base font-bold text-klarna-ink mt-1 block">Cheerio / Node.js</span>
-              <span className="text-xs text-klarna-muted mt-0.5 block">Parses HTML table structure cleanly</span>
+              <span className="text-base font-bold text-klarna-ink mt-1 block">Camoufox (Stealth C++)</span>
+              <span className="text-xs text-klarna-muted mt-0.5 block">Bypasses Cloudflare & extracts tables cleanly</span>
             </div>
             <div className="p-5 rounded-2xl bg-klarna-surface-1 border border-klarna-border">
               <span className="text-[10px] font-mono font-bold uppercase text-klarna-subdued block">SCHEDULING</span>

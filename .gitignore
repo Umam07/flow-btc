@@ -43,3 +43,8 @@ desktop.ini
 # Editor directories
 .vscode/
 .idea/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo

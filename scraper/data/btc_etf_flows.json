@@ -1,0 +1,1495 @@
+{
+  "metadata": {
+    "source_url": "https://farside.co.uk/btc/",
+    "scraped_at": "2026-09-07T14:01:32.406761+00:00",
+    "currency": "USD (millions)",
+    "total_days": 13,
+    "date_range": {
+      "start": "2026-08-19",
+      "end": "2026-09-04"
+    },
+    "tickers": [
+      "IBIT",
+      "FBTC",
+      "BITB",
+      "ARKB",
+      "BTCO",
+      "EZBC",
+      "BRRR",
+      "HODL",
+      "BTCW",
+      "MSBT",
+      "GBTC",
+      "BTC"
+    ],
+    "funds": {
+      "IBIT": {
+        "name": "iShares Bitcoin Trust",
+        "issuer": "BlackRock"
+      },
+      "FBTC": {
+        "name": "Wise Origin Bitcoin Trust",
+        "issuer": "Fidelity"
+      },
+      "BITB": {
+        "name": "Bitwise Bitcoin ETF",
+        "issuer": "Bitwise"
+      },
+      "ARKB": {
+        "name": "ARK 21Shares Bitcoin ETF",
+        "issuer": "ARK / 21Shares"
+      },
+      "BTCO": {
+        "name": "Invesco Galaxy Bitcoin ETF",
+        "issuer": "Invesco"
+      },
+      "EZBC": {
+        "name": "Franklin Bitcoin ETF",
+        "issuer": "Franklin Templeton"
+      },
+      "BRRR": {
+        "name": "Valkyrie Bitcoin Fund",
+        "issuer": "CoinShares / Valkyrie"
+      },
+      "HODL": {
+        "name": "VanEck Bitcoin Trust",
+        "issuer": "VanEck"
+      },
+      "BTCW": {
+        "name": "WisdomTree Bitcoin Fund",
+        "issuer": "WisdomTree"
+      },
+      "MSBT": {
+        "name": "Grayscale Bitcoin Mini Trust",
+        "issuer": "Grayscale"
+      },
+      "GBTC": {
+        "name": "Grayscale Bitcoin Trust",
+        "issuer": "Grayscale"
+      },
+      "BTC": {
+        "name": "Grayscale Bitcoin Mini Trust / Others",
+        "issuer": "Grayscale"
+      }
+    }
+  },
+  "fees": {
+    "IBIT": "0.25%",
+    "FBTC": "0.25%",
+    "BITB": "0.20%",
+    "ARKB": "0.21%",
+    "BTCO": "0.25%",
+    "EZBC": "0.19%",
+    "BRRR": "0.25%",
+    "HODL": "0.20%",
+    "BTCW": "0.25%",
+    "MSBT": "0.14%",
+    "GBTC": "1.50%",
+    "BTC": "0.15%"
+  },
+  "summary": {
+    "total": {
+      "IBIT": 64056.0,
+      "FBTC": 10342.0,
+      "BITB": 2113.0,
+      "ARKB": 1462.0,
+      "BTCO": 149.0,
+      "EZBC": 314.0,
+      "BRRR": 329.0,
+      "HODL": 1029.0,
+      "BTCW": 82.0,
+      "MSBT": 540.0,
+      "GBTC": -27653.0,
+      "BTC": 2924.0,
+      "total": 55686.0
+    },
+    "average": {
+      "IBIT": 96.3,
+      "FBTC": 15.6,
+      "BITB": 3.2,
+      "ARKB": 2.2,
+      "BTCO": 0.2,
+      "EZBC": 0.5,
+      "BRRR": 0.5,
+      "HODL": 1.5,
+      "BTCW": 0.1,
+      "MSBT": 5.1,
+      "GBTC": -41.6,
+      "BTC": 5.6,
+      "total": 83.7
+    },
+    "maximum": {
+      "IBIT": 1119.9,
+      "FBTC": 473.4,
+      "BITB": 237.9,
+      "ARKB": 268.7,
+      "BTCO": 63.4,
+      "EZBC": 60.9,
+      "BRRR": 43.4,
+      "HODL": 118.8,
+      "BTCW": 118.5,
+      "MSBT": 30.6,
+      "GBTC": 102.5,
+      "BTC": 191.1,
+      "total": 1373.8
+    },
+    "minimum": {
+      "IBIT": -528.3,
+      "FBTC": -356.6,
+      "BITB": -280.7,
+      "ARKB": -327.9,
+      "BTCO": -62.0,
+      "EZBC": -74.1,
+      "BRRR": -74.8,
+      "HODL": -38.4,
+      "BTCW": -53.8,
+      "MSBT": -5.3,
+      "GBTC": -642.5,
+      "BTC": -318.2,
+      "total": -1113.7
+    }
+  },
+  "daily_flows": [
+    {
+      "date": "2026-08-19",
+      "raw_date": "19 Aug 2026",
+      "total": 517.2,
+      "flows": {
+        "IBIT": 284.7,
+        "FBTC": 62.4,
+        "BITB": 35.6,
+        "ARKB": 77.7,
+        "BTCO": 0.0,
+        "EZBC": 5.9,
+        "BRRR": 0.0,
+        "HODL": 0.0,
+        "BTCW": 0.0,
+        "MSBT": 10.0,
+        "GBTC": 21.2,
+        "BTC": 19.7
+      }
+    },
+    {
+      "date": "2026-08-20",
+      "raw_date": "20 Aug 2026",
+      "total": 606.3,
+      "flows": {
+        "IBIT": 503.0,
+        "FBTC": 64.7,
+        "BITB": 26.4,
+        "ARKB": 12.2,
+        "BTCO": 3.6,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": -3.6,
+        "BTCW": 0.0,
+        "MSBT": 0.0,
+        "GBTC": 0.0,
+        "BTC": 0.0
+      }
+    },
+    {
+      "date": "2026-08-21",
+      "raw_date": "21 Aug 2026",
+      "total": 307.5,
+      "flows": {
+        "IBIT": 239.3,
+        "FBTC": 30.2,
+        "BITB": 9.2,
+        "ARKB": 3.1,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": 4.4,
+        "BTCW": 0.0,
+        "MSBT": 7.7,
+        "GBTC": 0.0,
+        "BTC": 13.6
+      }
+    },
+    {
+      "date": "2026-08-24",
+      "raw_date": "24 Aug 2026",
+      "total": 337.6,
+      "flows": {
+        "IBIT": 208.9,
+        "FBTC": 104.6,
+        "BITB": 3.0,
+        "ARKB": 0.0,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": 3.3,
+        "BTCW": 0.0,
+        "MSBT": 1.4,
+        "GBTC": 0.0,
+        "BTC": 16.4
+      }
+    },
+    {
+      "date": "2026-08-25",
+      "raw_date": "25 Aug 2026",
+      "total": 314.3,
+      "flows": {
+        "IBIT": 284.4,
+        "FBTC": 15.4,
+        "BITB": 3.0,
+        "ARKB": 0.0,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": 0.0,
+        "BTCW": 0.0,
+        "MSBT": 4.5,
+        "GBTC": 0.0,
+        "BTC": 7.0
+      }
+    },
+    {
+      "date": "2026-08-26",
+      "raw_date": "26 Aug 2026",
+      "total": 232.2,
+      "flows": {
+        "IBIT": 200.8,
+        "FBTC": 25.6,
+        "BITB": 6.0,
+        "ARKB": 0.0,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": 0.0,
+        "BTCW": 0.0,
+        "MSBT": 3.4,
+        "GBTC": -50.4,
+        "BTC": 46.8
+      }
+    },
+    {
+      "date": "2026-08-27",
+      "raw_date": "27 Aug 2026",
+      "total": 242.3,
+      "flows": {
+        "IBIT": 277.6,
+        "FBTC": -83.6,
+        "BITB": 21.7,
+        "ARKB": 29.7,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": 5.7,
+        "BTCW": 0.0,
+        "MSBT": 6.7,
+        "GBTC": -27.2,
+        "BTC": 11.7
+      }
+    },
+    {
+      "date": "2026-08-28",
+      "raw_date": "28 Aug 2026",
+      "total": -201.9,
+      "flows": {
+        "IBIT": -33.4,
+        "FBTC": 0.0,
+        "BITB": -49.7,
+        "ARKB": -114.9,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": -13.2,
+        "BTCW": 0.0,
+        "MSBT": 9.3,
+        "GBTC": 0.0,
+        "BTC": 0.0
+      }
+    },
+    {
+      "date": "2026-08-31",
+      "raw_date": "31 Aug 2026",
+      "total": 216.7,
+      "flows": {
+        "IBIT": 205.9,
+        "FBTC": 6.9,
+        "BITB": 4.3,
+        "ARKB": 0.0,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": -13.4,
+        "BTCW": 0.0,
+        "MSBT": 3.6,
+        "GBTC": 0.0,
+        "BTC": 9.4
+      }
+    },
+    {
+      "date": "2026-09-01",
+      "raw_date": "01 Sep 2026",
+      "total": -236.5,
+      "flows": {
+        "IBIT": -201.2,
+        "FBTC": -43.7,
+        "BITB": 8.4,
+        "ARKB": 0.0,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": 0.0,
+        "BTCW": 0.0,
+        "MSBT": 0.0,
+        "GBTC": 0.0,
+        "BTC": 0.0
+      }
+    },
+    {
+      "date": "2026-09-02",
+      "raw_date": "02 Sep 2026",
+      "total": 101.1,
+      "flows": {
+        "IBIT": 115.4,
+        "FBTC": 0.0,
+        "BITB": 4.2,
+        "ARKB": 0.0,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": 0.0,
+        "BTCW": 0.0,
+        "MSBT": 7.3,
+        "GBTC": -56.2,
+        "BTC": 30.4
+      }
+    },
+    {
+      "date": "2026-09-03",
+      "raw_date": "03 Sep 2026",
+      "total": 730.8,
+      "flows": {
+        "IBIT": 454.0,
+        "FBTC": 74.4,
+        "BITB": 24.8,
+        "ARKB": 137.7,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": -19.6,
+        "BTCW": -5.2,
+        "MSBT": 7.7,
+        "GBTC": 8.2,
+        "BTC": 48.8
+      }
+    },
+    {
+      "date": "2026-09-04",
+      "raw_date": "04 Sep 2026",
+      "total": 174.6,
+      "flows": {
+        "IBIT": 117.4,
+        "FBTC": 57.2,
+        "BITB": 0.0,
+        "ARKB": 0.0,
+        "BTCO": 0.0,
+        "EZBC": 0.0,
+        "BRRR": 0.0,
+        "HODL": 0.0,
+        "BTCW": 0.0,
+        "MSBT": 0.0,
+        "GBTC": 0.0,
+        "BTC": 0.0
+      }
+    }
+  ],
+  "flat_records": [
+    {
+      "date": "2026-08-19",
+      "ticker": "IBIT",
+      "flow_usd_millions": 284.7,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "FBTC",
+      "flow_usd_millions": 62.4,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "BITB",
+      "flow_usd_millions": 35.6,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "ARKB",
+      "flow_usd_millions": 77.7,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "EZBC",
+      "flow_usd_millions": 5.9,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "HODL",
+      "flow_usd_millions": 0.0,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "MSBT",
+      "flow_usd_millions": 10.0,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "GBTC",
+      "flow_usd_millions": 21.2,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-19",
+      "ticker": "BTC",
+      "flow_usd_millions": 19.7,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "IBIT",
+      "flow_usd_millions": 503.0,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "FBTC",
+      "flow_usd_millions": 64.7,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "BITB",
+      "flow_usd_millions": 26.4,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "ARKB",
+      "flow_usd_millions": 12.2,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "BTCO",
+      "flow_usd_millions": 3.6,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "HODL",
+      "flow_usd_millions": -3.6,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "MSBT",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "GBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-20",
+      "ticker": "BTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "IBIT",
+      "flow_usd_millions": 239.3,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "FBTC",
+      "flow_usd_millions": 30.2,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "BITB",
+      "flow_usd_millions": 9.2,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "ARKB",
+      "flow_usd_millions": 3.1,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "HODL",
+      "flow_usd_millions": 4.4,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "MSBT",
+      "flow_usd_millions": 7.7,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "GBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-21",
+      "ticker": "BTC",
+      "flow_usd_millions": 13.6,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "IBIT",
+      "flow_usd_millions": 208.9,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "FBTC",
+      "flow_usd_millions": 104.6,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "BITB",
+      "flow_usd_millions": 3.0,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "ARKB",
+      "flow_usd_millions": 0.0,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "HODL",
+      "flow_usd_millions": 3.3,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "MSBT",
+      "flow_usd_millions": 1.4,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "GBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-24",
+      "ticker": "BTC",
+      "flow_usd_millions": 16.4,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "IBIT",
+      "flow_usd_millions": 284.4,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "FBTC",
+      "flow_usd_millions": 15.4,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "BITB",
+      "flow_usd_millions": 3.0,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "ARKB",
+      "flow_usd_millions": 0.0,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "HODL",
+      "flow_usd_millions": 0.0,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "MSBT",
+      "flow_usd_millions": 4.5,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "GBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-25",
+      "ticker": "BTC",
+      "flow_usd_millions": 7.0,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "IBIT",
+      "flow_usd_millions": 200.8,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "FBTC",
+      "flow_usd_millions": 25.6,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "BITB",
+      "flow_usd_millions": 6.0,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "ARKB",
+      "flow_usd_millions": 0.0,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "HODL",
+      "flow_usd_millions": 0.0,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "MSBT",
+      "flow_usd_millions": 3.4,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "GBTC",
+      "flow_usd_millions": -50.4,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-26",
+      "ticker": "BTC",
+      "flow_usd_millions": 46.8,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "IBIT",
+      "flow_usd_millions": 277.6,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "FBTC",
+      "flow_usd_millions": -83.6,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "BITB",
+      "flow_usd_millions": 21.7,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "ARKB",
+      "flow_usd_millions": 29.7,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "HODL",
+      "flow_usd_millions": 5.7,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "MSBT",
+      "flow_usd_millions": 6.7,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "GBTC",
+      "flow_usd_millions": -27.2,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-27",
+      "ticker": "BTC",
+      "flow_usd_millions": 11.7,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "IBIT",
+      "flow_usd_millions": -33.4,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "FBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "BITB",
+      "flow_usd_millions": -49.7,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "ARKB",
+      "flow_usd_millions": -114.9,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "HODL",
+      "flow_usd_millions": -13.2,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "MSBT",
+      "flow_usd_millions": 9.3,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "GBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-28",
+      "ticker": "BTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "IBIT",
+      "flow_usd_millions": 205.9,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "FBTC",
+      "flow_usd_millions": 6.9,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "BITB",
+      "flow_usd_millions": 4.3,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "ARKB",
+      "flow_usd_millions": 0.0,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "HODL",
+      "flow_usd_millions": -13.4,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "MSBT",
+      "flow_usd_millions": 3.6,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "GBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-08-31",
+      "ticker": "BTC",
+      "flow_usd_millions": 9.4,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "IBIT",
+      "flow_usd_millions": -201.2,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "FBTC",
+      "flow_usd_millions": -43.7,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "BITB",
+      "flow_usd_millions": 8.4,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "ARKB",
+      "flow_usd_millions": 0.0,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "HODL",
+      "flow_usd_millions": 0.0,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "MSBT",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "GBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-01",
+      "ticker": "BTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "IBIT",
+      "flow_usd_millions": 115.4,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "FBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "BITB",
+      "flow_usd_millions": 4.2,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "ARKB",
+      "flow_usd_millions": 0.0,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "HODL",
+      "flow_usd_millions": 0.0,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "MSBT",
+      "flow_usd_millions": 7.3,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "GBTC",
+      "flow_usd_millions": -56.2,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "BTC",
+      "flow_usd_millions": 30.4,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "IBIT",
+      "flow_usd_millions": 454.0,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "FBTC",
+      "flow_usd_millions": 74.4,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "BITB",
+      "flow_usd_millions": 24.8,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "ARKB",
+      "flow_usd_millions": 137.7,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "HODL",
+      "flow_usd_millions": -19.6,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "BTCW",
+      "flow_usd_millions": -5.2,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "MSBT",
+      "flow_usd_millions": 7.7,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "GBTC",
+      "flow_usd_millions": 8.2,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-03",
+      "ticker": "BTC",
+      "flow_usd_millions": 48.8,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "IBIT",
+      "flow_usd_millions": 117.4,
+      "fund_name": "iShares Bitcoin Trust",
+      "issuer": "BlackRock"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "FBTC",
+      "flow_usd_millions": 57.2,
+      "fund_name": "Wise Origin Bitcoin Trust",
+      "issuer": "Fidelity"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "BITB",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Bitwise Bitcoin ETF",
+      "issuer": "Bitwise"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "ARKB",
+      "flow_usd_millions": 0.0,
+      "fund_name": "ARK 21Shares Bitcoin ETF",
+      "issuer": "ARK / 21Shares"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "BTCO",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Invesco Galaxy Bitcoin ETF",
+      "issuer": "Invesco"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "EZBC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Franklin Bitcoin ETF",
+      "issuer": "Franklin Templeton"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "BRRR",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Valkyrie Bitcoin Fund",
+      "issuer": "CoinShares / Valkyrie"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "HODL",
+      "flow_usd_millions": 0.0,
+      "fund_name": "VanEck Bitcoin Trust",
+      "issuer": "VanEck"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "BTCW",
+      "flow_usd_millions": 0.0,
+      "fund_name": "WisdomTree Bitcoin Fund",
+      "issuer": "WisdomTree"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "MSBT",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Mini Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "GBTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Trust",
+      "issuer": "Grayscale"
+    },
+    {
+      "date": "2026-09-04",
+      "ticker": "BTC",
+      "flow_usd_millions": 0.0,
+      "fund_name": "Grayscale Bitcoin Mini Trust / Others",
+      "issuer": "Grayscale"
+    }
+  ]
+}
