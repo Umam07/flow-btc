@@ -8,10 +8,14 @@ import {
   Calendar,
   Layers,
   ChevronDown,
+  ChevronRight,
   X,
   TrendingUp,
   TrendingDown,
   Building2,
+  Sparkles,
+  Info,
+  Coins,
 } from "lucide-react";
 import { FlowDirectionFilter, FlowRecord } from "@/types/flow";
 import {
@@ -39,8 +43,24 @@ interface HistoricalLedgerProps {
   onClearFilters: () => void;
 }
 
-type SortColumn = "date" | "total" | "ibit" | "fbtc" | "bitb" | "arkb" | "gbtc" | "others";
+type SortColumn = "date" | "total" | "ibit" | "fbtc" | "gbtc";
 type SortOrder = "asc" | "desc";
+
+// Fund issuer metadata reference for the drawer
+const FUND_NAMES: Record<string, { name: string; manager: string; fee: string }> = {
+  IBIT: { name: "iShares Bitcoin Trust", manager: "BlackRock", fee: "0.25%" },
+  FBTC: { name: "Wise Origin Bitcoin Trust", manager: "Fidelity", fee: "0.25%" },
+  BITB: { name: "Bitwise Bitcoin ETF", manager: "Bitwise", fee: "0.20%" },
+  ARKB: { name: "ARK 21Shares Bitcoin ETF", manager: "ARK / 21Shares", fee: "0.21%" },
+  BTCO: { name: "Invesco Galaxy Bitcoin ETF", manager: "Invesco", fee: "0.25%" },
+  EZBC: { name: "Franklin Bitcoin ETF", manager: "Franklin Templeton", fee: "0.19%" },
+  BRRR: { name: "Valkyrie Bitcoin Fund", manager: "CoinShares", fee: "0.25%" },
+  HODL: { name: "VanEck Bitcoin Trust", manager: "VanEck", fee: "0.20%" },
+  BTCW: { name: "WisdomTree Bitcoin Fund", manager: "WisdomTree", fee: "0.25%" },
+  MSBT: { name: "Grayscale Mini Trust", manager: "Grayscale", fee: "0.14%" },
+  GBTC: { name: "Grayscale Bitcoin Trust", manager: "Grayscale", fee: "1.50%" },
+  BTC: { name: "Grayscale Mini / Other", manager: "Grayscale", fee: "0.15%" },
+};
 
 export function HistoricalLedger({
   searchQuery,
@@ -56,8 +76,12 @@ export function HistoricalLedger({
   const dirFilterSelectId = useId();
   const [sortCol, setSortCol] = useState<SortColumn>("date");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [expandedDate, setExpandedDate] = useState<string | null>(null);
 
-  // Interactive column sorting
+  const toggleRow = (date: string) => {
+    setExpandedDate((prev) => (prev === date ? null : date));
+  };
+
   const handleSort = (col: SortColumn) => {
     if (sortCol === col) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -103,16 +127,7 @@ export function HistoricalLedger({
               Historical ETF Flow Ledger
             </CardTitle>
             <CardDescription className="text-xs sm:text-sm text-klarna-muted mt-1">
-              Data verified via{" "}
-              <a
-                href="https://farside.co.uk/btc/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-klarna-ink font-bold underline focus-ring rounded"
-              >
-                farside.co.uk
-              </a>{" "}
-              institutional feeds. Click table headers to sort columns.
+              Klik baris mana saja untuk membuka rincian lengkap 11 emiten ETF Bitcoin pada sesi tersebut.
             </CardDescription>
           </div>
 
@@ -123,7 +138,7 @@ export function HistoricalLedger({
               <Search className="w-4 h-4 text-klarna-subdued absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <Input
                 type="text"
-                placeholder="Filter date (e.g. Sep 04)..."
+                placeholder="Cari tanggal (misal: Sep 04)..."
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 aria-label="Filter records by date"
@@ -153,9 +168,9 @@ export function HistoricalLedger({
                 aria-label="Filter records by flow direction"
                 className="w-full sm:w-auto appearance-none pl-9 pr-9 py-2 rounded-full bg-klarna-canvas border border-klarna-border text-xs text-klarna-ink font-bold focus-ring cursor-pointer shadow-card h-10"
               >
-                <option value="all">All Sessions</option>
-                <option value="inflow">Inflows Only (+$)</option>
-                <option value="outflow">Outflows Only (-$)</option>
+                <option value="all">Semua Sesi Pasar</option>
+                <option value="inflow">Net Inflow Sahaja (+$)</option>
+                <option value="outflow">Net Outflow Sahaja (-$)</option>
               </select>
               <Filter className="w-3.5 h-3.5 text-klarna-subdued absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <ChevronDown className="w-3.5 h-3.5 text-klarna-muted absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -176,27 +191,29 @@ export function HistoricalLedger({
       </CardHeader>
 
       <CardContent className="p-0">
-        {/* Mobile Swipe Hint */}
-        <div className="sm:hidden flex items-center justify-between px-4 py-2 bg-klarna-surface-2/60 border-b border-klarna-border text-[11px] text-klarna-muted font-medium">
+        {/* Table Tip */}
+        <div className="flex items-center justify-between px-4 py-2 bg-klarna-surface-2/60 border-b border-klarna-border text-[11px] text-klarna-muted font-medium">
           <span className="flex items-center gap-1.5">
-            <span>👉</span>
-            <span>Geser horizontal untuk rincian semua ETF</span>
+            <Info className="w-3.5 h-3.5 text-klarna-ink" />
+            <span>Klik baris untuk membuka / menutup breakdown rincian 11 ETF</span>
           </span>
-          <span className="font-mono font-bold text-klarna-ink text-[10px]">11 ISSUERS</span>
+          <span className="font-mono text-klarna-ink text-[10px] hidden sm:inline">
+            EXPANDABLE DRAWER
+          </span>
         </div>
 
-        {/* shadcn Table Component */}
+        {/* Clean & Legible Table with Progressive Disclosure */}
         <div className="w-full overflow-x-auto">
           <Table className="w-full border-collapse font-finance">
             <TableHeader>
               <TableRow className="bg-klarna-surface-2/70 border-b border-klarna-border text-[11px] font-mono uppercase text-klarna-muted tracking-wider hover:bg-klarna-surface-2">
                 <TableHead
                   onClick={() => handleSort("date")}
-                  className="py-3.5 px-4 font-bold text-klarna-ink cursor-pointer select-none hover:text-klarna-pink-pressed transition-colors"
+                  className="py-3.5 px-4 font-bold text-klarna-ink cursor-pointer select-none hover:text-klarna-pink-pressed transition-colors w-[180px]"
                 >
                   <div className="flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" />
-                    <span>Date</span>
+                    <span>Tanggal</span>
                     <ArrowUpDown className="w-3 h-3 text-klarna-subdued" />
                   </div>
                 </TableHead>
@@ -206,78 +223,44 @@ export function HistoricalLedger({
                   className="py-3.5 px-4 font-bold text-klarna-ink cursor-pointer select-none hover:text-klarna-pink-pressed transition-colors"
                 >
                   <div className="flex items-center gap-1.5">
-                    <span>Net Total</span>
+                    <span>Total Net Flow</span>
                     <ArrowUpDown className="w-3 h-3 text-klarna-subdued" />
+                  </div>
+                </TableHead>
+
+                <TableHead className="py-3.5 px-4 font-bold text-klarna-ink">
+                  <div className="flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Market Driver</span>
                   </div>
                 </TableHead>
 
                 <TableHead
                   onClick={() => handleSort("ibit")}
-                  className="py-3.5 px-3 font-bold text-emerald-700 cursor-pointer select-none hover:text-emerald-900 transition-colors"
+                  className="py-3.5 px-4 font-bold text-emerald-700 cursor-pointer select-none hidden md:table-cell"
                 >
-                  <div className="flex items-center gap-1">
-                    <span>IBIT</span>
-                    <span className="text-[9px] font-sans font-normal opacity-75">(BlackRock)</span>
-                  </div>
-                </TableHead>
-
-                <TableHead
-                  onClick={() => handleSort("fbtc")}
-                  className="py-3.5 px-3 font-bold text-klarna-ink cursor-pointer select-none"
-                >
-                  <div className="flex items-center gap-1">
-                    <span>FBTC</span>
-                    <span className="text-[9px] font-sans font-normal opacity-75">(Fidelity)</span>
-                  </div>
-                </TableHead>
-
-                <TableHead
-                  onClick={() => handleSort("bitb")}
-                  className="py-3.5 px-3 font-bold text-klarna-ink cursor-pointer select-none"
-                >
-                  <div className="flex items-center gap-1">
-                    <span>BITB</span>
-                  </div>
-                </TableHead>
-
-                <TableHead
-                  onClick={() => handleSort("arkb")}
-                  className="py-3.5 px-3 font-bold text-klarna-ink cursor-pointer select-none"
-                >
-                  <div className="flex items-center gap-1">
-                    <span>ARKB</span>
-                  </div>
+                  IBIT (BlackRock)
                 </TableHead>
 
                 <TableHead
                   onClick={() => handleSort("gbtc")}
-                  className="py-3.5 px-3 font-bold text-klarna-error cursor-pointer select-none"
+                  className="py-3.5 px-4 font-bold text-klarna-error cursor-pointer select-none hidden md:table-cell"
                 >
-                  <div className="flex items-center gap-1">
-                    <span>GBTC</span>
-                    <span className="text-[9px] font-sans font-normal opacity-75">(Grayscale)</span>
-                  </div>
-                </TableHead>
-
-                <TableHead
-                  onClick={() => handleSort("others")}
-                  className="py-3.5 px-3 font-bold text-klarna-subdued cursor-pointer select-none"
-                >
-                  <div className="flex items-center gap-1">
-                    <span>Others</span>
-                  </div>
+                  GBTC (Grayscale)
                 </TableHead>
 
                 <TableHead className="py-3.5 px-4 font-bold text-right text-klarna-ink">
                   Status
                 </TableHead>
+
+                <TableHead className="w-10 px-2 text-center"></TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody className="text-xs divide-y divide-klarna-border/60">
               {sortedRows.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={9} className="py-16 text-center">
+                  <TableCell colSpan={7} className="py-16 text-center">
                     <div className="flex flex-col items-center justify-center space-y-3">
                       <div className="w-12 h-12 rounded-full bg-klarna-surface-2 flex items-center justify-center text-klarna-muted">
                         <Search className="w-5 h-5" />
@@ -295,80 +278,173 @@ export function HistoricalLedger({
               ) : (
                 sortedRows.map((r) => {
                   const isPos = r.total >= 0;
+                  const isExpanded = expandedDate === r.date;
+                  const btcEquiv = Math.round(((r.total || 0) * 1_000_000) / 65000);
+
+                  // Extract all funds from breakdown or fallback
+                  const flowsMap = r.breakdown || {
+                    IBIT: r.ibit,
+                    FBTC: r.fbtc,
+                    BITB: r.bitb,
+                    ARKB: r.arkb,
+                    GBTC: r.gbtc,
+                    Others: r.others,
+                  };
 
                   return (
-                    <TableRow
-                      key={r.date}
-                      className="hover:bg-klarna-surface-1/80 transition-colors group"
-                    >
-                      <TableCell className="py-3.5 px-4 font-bold text-klarna-ink whitespace-nowrap">
-                        <div className="flex items-center gap-1.5">
-                          <span>{r.label}, 2026</span>
-                        </div>
-                      </TableCell>
+                    <React.Fragment key={r.date}>
+                      {/* Primary Clean Row */}
+                      <TableRow
+                        onClick={() => toggleRow(r.date)}
+                        className={`transition-colors cursor-pointer group ${
+                          isExpanded
+                            ? "bg-klarna-surface-1/90 border-b-0"
+                            : "hover:bg-klarna-surface-1/60"
+                        }`}
+                      >
+                        <TableCell className="py-3.5 px-4 font-bold text-klarna-ink whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono font-bold">{r.label}, 2026</span>
+                          </div>
+                        </TableCell>
 
-                      <TableCell className="py-3.5 px-4 font-black text-xs sm:text-sm whitespace-nowrap">
-                        <div className="flex items-center gap-1.5">
-                          {isPos ? (
-                            <TrendingUp className="w-3.5 h-3.5 text-klarna-success shrink-0" />
+                        <TableCell className="py-3.5 px-4 font-black text-xs sm:text-sm whitespace-nowrap">
+                          <div className="flex items-center gap-1.5">
+                            {isPos ? (
+                              <TrendingUp className="w-3.5 h-3.5 text-klarna-success shrink-0" />
+                            ) : (
+                              <TrendingDown className="w-3.5 h-3.5 text-klarna-error shrink-0" />
+                            )}
+                            <span className={isPos ? "text-klarna-success" : "text-klarna-error"}>
+                              {isPos ? "+" : ""}
+                              {r.total.toFixed(1)}M
+                            </span>
+                          </div>
+                        </TableCell>
+
+                        {/* Smart Driver Badge (Feature 3) */}
+                        <TableCell className="py-3.5 px-4 whitespace-nowrap">
+                          {r.marketDriver ? (
+                            <div className="flex items-center gap-1.5">
+                              <Badge
+                                variant={r.marketDriver.isPositive ? "success" : "destructive"}
+                                className="text-[10px] font-mono tracking-tight font-bold"
+                              >
+                                {r.marketDriver.badgeText}
+                              </Badge>
+                            </div>
                           ) : (
-                            <TrendingDown className="w-3.5 h-3.5 text-klarna-error shrink-0" />
+                            <span className="text-klarna-subdued text-[11px]">-</span>
                           )}
-                          <span className={isPos ? "text-klarna-success" : "text-klarna-error"}>
-                            {isPos ? "+" : ""}
-                            {r.total.toFixed(1)}M
-                          </span>
-                        </div>
-                      </TableCell>
+                        </TableCell>
 
-                      <TableCell className="py-3.5 px-3 font-semibold text-klarna-success whitespace-nowrap">
-                        {r.ibit >= 0 ? "+" : ""}
-                        {r.ibit.toFixed(1)}M
-                      </TableCell>
+                        {/* IBIT Column (Clean overview) */}
+                        <TableCell className="py-3.5 px-4 font-semibold text-emerald-700 whitespace-nowrap hidden md:table-cell">
+                          {r.ibit >= 0 ? "+" : ""}
+                          {r.ibit.toFixed(1)}M
+                        </TableCell>
 
-                      <TableCell
-                        className={`py-3.5 px-3 whitespace-nowrap font-medium ${
-                          r.fbtc >= 0 ? "text-klarna-ink" : "text-klarna-error"
-                        }`}
-                      >
-                        {r.fbtc >= 0 ? "+" : ""}
-                        {r.fbtc.toFixed(1)}M
-                      </TableCell>
+                        {/* GBTC Column */}
+                        <TableCell className="py-3.5 px-4 font-bold text-klarna-error whitespace-nowrap hidden md:table-cell">
+                          {r.gbtc >= 0 ? "+" : ""}
+                          {r.gbtc.toFixed(1)}M
+                        </TableCell>
 
-                      <TableCell
-                        className={`py-3.5 px-3 whitespace-nowrap ${
-                          r.bitb >= 0 ? "text-klarna-ink" : "text-klarna-error"
-                        }`}
-                      >
-                        {r.bitb >= 0 ? "+" : ""}
-                        {r.bitb.toFixed(1)}M
-                      </TableCell>
+                        {/* Status Badge */}
+                        <TableCell className="py-3.5 px-4 text-right whitespace-nowrap">
+                          <Badge variant={isPos ? "success" : "destructive"}>
+                            {isPos ? "Net Inflow" : "Net Outflow"}
+                          </Badge>
+                        </TableCell>
 
-                      <TableCell
-                        className={`py-3.5 px-3 whitespace-nowrap ${
-                          r.arkb >= 0 ? "text-klarna-ink" : "text-klarna-error"
-                        }`}
-                      >
-                        {r.arkb >= 0 ? "+" : ""}
-                        {r.arkb.toFixed(1)}M
-                      </TableCell>
+                        {/* Expand Chevron Icon */}
+                        <TableCell className="py-3.5 px-2 text-center text-klarna-subdued group-hover:text-klarna-ink transition-colors">
+                          <ChevronRight
+                            className={`w-4 h-4 transition-transform duration-200 ${
+                              isExpanded ? "rotate-90 text-klarna-ink" : ""
+                            }`}
+                          />
+                        </TableCell>
+                      </TableRow>
 
-                      <TableCell className="py-3.5 px-3 font-bold text-klarna-error whitespace-nowrap">
-                        {r.gbtc >= 0 ? "+" : ""}
-                        {r.gbtc.toFixed(1)}M
-                      </TableCell>
+                      {/* Expandable Drawer Panel (Feature 1: Progressive Disclosure) */}
+                      {isExpanded && (
+                        <TableRow className="bg-klarna-surface-1/90 border-b border-klarna-border/80">
+                          <TableCell colSpan={7} className="p-4 sm:p-6 pt-2">
+                            <div className="rounded-2xl bg-klarna-canvas border border-klarna-border/70 p-4 sm:p-5 space-y-4 shadow-sm">
+                              {/* Session Summary Header */}
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-klarna-border/60">
+                                <div>
+                                  <h4 className="font-bold text-sm text-klarna-ink flex items-center gap-2">
+                                    <span>Rincian Arus Seluruh Emiten ETF</span>
+                                    <span className="text-xs text-klarna-muted font-normal font-mono">
+                                      ({r.date})
+                                    </span>
+                                  </h4>
+                                  <p className="text-[11px] text-klarna-muted mt-0.5">
+                                    Disadur dari institutional feed Farside Investors.
+                                  </p>
+                                </div>
 
-                      <TableCell className="py-3.5 px-3 text-klarna-muted whitespace-nowrap">
-                        {r.others >= 0 ? "+" : ""}
-                        {r.others.toFixed(1)}M
-                      </TableCell>
+                                <div className="flex items-center gap-2 text-xs">
+                                  <Badge variant="outline" className="gap-1 font-mono text-[10px]">
+                                    <Coins className="w-3 h-3 text-amber-500" />
+                                    {isPos ? "+" : ""}{btcEquiv.toLocaleString("en-US")} BTC Equivalent
+                                  </Badge>
+                                </div>
+                              </div>
 
-                      <TableCell className="py-3.5 px-4 text-right whitespace-nowrap">
-                        <Badge variant={isPos ? "success" : "destructive"}>
-                          {isPos ? "Net Inflow" : "Net Outflow"}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
+                              {/* 11 ETF Flow Grid */}
+                              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 font-finance">
+                                {Object.entries(flowsMap).map(([ticker, val]) => {
+                                  const num = Number(val) || 0;
+                                  const isFundPos = num >= 0;
+                                  const meta = FUND_NAMES[ticker] || {
+                                    name: ticker,
+                                    manager: "Issuer",
+                                    fee: "0.25%",
+                                  };
+
+                                  return (
+                                    <div
+                                      key={ticker}
+                                      className="p-3 rounded-xl bg-klarna-surface-1/70 border border-klarna-border/60 flex flex-col justify-between"
+                                    >
+                                      <div className="flex items-center justify-between mb-1">
+                                        <span className="font-mono font-bold text-xs text-klarna-ink bg-white px-2 py-0.5 rounded-full border border-klarna-border/80">
+                                          {ticker}
+                                        </span>
+                                        <span className="text-[10px] text-klarna-subdued font-sans">
+                                          Fee {meta.fee}
+                                        </span>
+                                      </div>
+
+                                      <div className="mt-2">
+                                        <span
+                                          className={`text-sm sm:text-base font-black ${
+                                            num === 0
+                                              ? "text-klarna-subdued"
+                                              : isFundPos
+                                              ? "text-klarna-success"
+                                              : "text-klarna-error"
+                                          }`}
+                                        >
+                                          {num > 0 ? "+" : ""}
+                                          ${num.toFixed(1)}M
+                                        </span>
+                                        <p className="text-[10px] text-klarna-muted font-sans truncate mt-0.5">
+                                          {meta.manager}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </React.Fragment>
                   );
                 })
               )}
@@ -394,7 +470,7 @@ export function HistoricalLedger({
             className="text-xs font-bold text-klarna-ink shadow-card"
           >
             {showAllRows
-              ? "Tampilkan 10 Sesi Terbaru"
+              ? "Tampilkan 15 Sesi Terbaru"
               : `Tampilkan Semua Sesi (${totalTableRowsCount})`}
           </Button>
         </div>

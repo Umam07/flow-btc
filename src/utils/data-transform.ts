@@ -30,16 +30,47 @@ export function transformScrapedData(json: ScrapedFlowJson): { convertedFlows: F
           10
       ) / 10;
 
+      const total = item.total ?? Math.round((ibit + fbtc + bitb + arkb + gbtc + others) * 10) / 10;
+
+      // Determine primary driver fund for this session
+      let topTicker = "IBIT";
+      let topMagnitude = 0;
+      let topValue = 0;
+
+      Object.entries(f).forEach(([ticker, val]) => {
+        const mag = Math.abs(val);
+        if (mag > topMagnitude) {
+          topMagnitude = mag;
+          topTicker = ticker;
+          topValue = val;
+        }
+      });
+
+      const pct = total !== 0 ? Math.round((Math.abs(topValue) / Math.abs(total)) * 100) : 0;
+      const badgeText =
+        topValue >= 0
+          ? `Led by ${topTicker} (+${topValue.toFixed(1)}M)`
+          : `${topTicker} Drag (${topValue.toFixed(1)}M)`;
+
       return {
         date: item.date,
         label: parseDateLabel(item.date, item.raw_date),
-        total: item.total ?? Math.round((ibit + fbtc + bitb + arkb + gbtc + others) * 10) / 10,
+        total,
         ibit,
         fbtc,
         bitb,
         arkb,
         gbtc,
         others,
+        breakdown: f,
+        marketDriver: {
+          ticker: topTicker,
+          name: topTicker,
+          amount: topValue,
+          pctOfTotal: Math.min(pct, 100),
+          isPositive: topValue >= 0,
+          badgeText,
+        },
       };
     });
 

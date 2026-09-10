@@ -8,6 +8,15 @@ export interface FlowRecord {
   arkb: number;
   gbtc: number;
   others: number;
+  breakdown?: Record<string, number>;
+  marketDriver?: {
+    ticker: string;
+    name: string;
+    amount: number;
+    pctOfTotal: number;
+    isPositive: boolean;
+    badgeText: string;
+  };
 }
 
 export interface Issuer {
