@@ -161,6 +161,39 @@ export function useFlowDashboard() {
     const avgDaily = totalDays > 0 ? (totalSum / totalDays).toFixed(1) : "0.0";
     const posRate = totalDays > 0 ? ((positiveCount / totalDays) * 100).toFixed(1) : "0.0";
 
+    // BTC Absorption calculations (USD flow / estimated BTC price $65,000)
+    const btcPriceEstimate = 65000;
+    const dailyMinerProduction = 450; // Post-halving daily issuance
+    const periodBtcAbsorbed = Math.round((totalSum * 1_000_000) / btcPriceEstimate);
+    const latestBtcAbsorbed = Math.round(((latest.total || 0) * 1_000_000) / btcPriceEstimate);
+    const dailyMinerMultiplier = Number((Math.abs(latestBtcAbsorbed) / dailyMinerProduction).toFixed(1));
+
+    // Streak calculations from flowData (newest to oldest)
+    let currentStreakType: "inflow" | "outflow" = (flowData[0]?.total ?? 0) >= 0 ? "inflow" : "outflow";
+    let currentStreakDays = 0;
+    for (let i = 0; i < flowData.length; i++) {
+      const isPos = flowData[i].total >= 0;
+      if ((currentStreakType === "inflow" && isPos) || (currentStreakType === "outflow" && !isPos)) {
+        currentStreakDays++;
+      } else {
+        break;
+      }
+    }
+
+    // Longest inflow streak in history
+    let longestInflowStreak = 0;
+    let currentRun = 0;
+    // reverse flowData to process chronologically
+    const chronological = [...flowData].reverse();
+    for (const record of chronological) {
+      if (record.total >= 0) {
+        currentRun++;
+        if (currentRun > longestInflowStreak) longestInflowStreak = currentRun;
+      } else {
+        currentRun = 0;
+      }
+    }
+
     return {
       totalSum,
       delta,
@@ -178,6 +211,15 @@ export function useFlowDashboard() {
       totalDays,
       posRate,
       avgDaily,
+      btcPriceEstimate,
+      periodBtcAbsorbed,
+      latestBtcAbsorbed,
+      dailyMinerMultiplier,
+      currentStreak: {
+        type: currentStreakType,
+        days: currentStreakDays,
+      },
+      longestInflowStreak,
     };
   }, [flowData, filteredData, currentPeriod]);
 

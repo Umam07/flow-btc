@@ -78,4 +78,13 @@ export interface DashboardStats {
   totalDays: number;
   posRate: string;
   avgDaily: string;
+  btcPriceEstimate: number;
+  periodBtcAbsorbed: number;
+  latestBtcAbsorbed: number;
+  dailyMinerMultiplier: number;
+  currentStreak: {
+    type: "inflow" | "outflow";
+    days: number;
+  };
+  longestInflowStreak: number;
 }
